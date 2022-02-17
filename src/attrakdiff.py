@@ -1,4 +1,4 @@
-""""This file is part of USAT.
+""""This file is part of PLADIF.
 
 	MIT License
 
@@ -23,7 +23,7 @@
 	SOFTWARE.
 
 
-USAT is a simple tool that taks survey from Usabilla and plot attrakdiff plots.
+PLADIF is a simple tool that plot attrakdiff graphs from CSV files (like those from Usabilla).
 It is written by Thibault Hilaire
 
 File: attrakdiff.py

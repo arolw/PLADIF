@@ -1,4 +1,4 @@
-""""This file is part of USAT.
+""""This file is part of PLADIF.
 
 	MIT License
 
@@ -23,10 +23,10 @@
 	SOFTWARE.
 
 
-USAT is a simple tool that taks survey from Usabilla and plot attrakdiff plots.
+PLADIF is a simple tool that plot attrakdiff graphs from CSV files (like those from Usabilla).
 It is written by Thibault Hilaire
 
-File: USAT.py
+File: PLADIF.py
 Date: Feb 2022
 
 	main file with the interactions
@@ -34,21 +34,21 @@ Date: Feb 2022
 
 
 import streamlit as st
+from os.path import splitext
+from locale import getdefaultlocale
 import matplotlib.pyplot as plt
 from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
 
 
 # TODO: think about i18n !
-# >>> import locale
-# >>> locale.getdefaultlocale()
-# ('en_GB', 'cp1252')
-# + https://lokalise.com/blog/beginners-guide-to-python-i18n/
+# https://lokalise.com/blog/beginners-guide-to-python-i18n/
 
 
 
 def shortname(filename: str, maxLength: int) -> str:
 	"""shorten a filename such that it doesn't exceed maxLength char
 	by adding ... in the middle"""
+	filename = splitext(filename)[0]
 	if len(filename) > maxLength:
 		return filename[0:maxLength//2-1] + "..." + filename[-maxLength//2:]
 	else:
@@ -57,27 +57,42 @@ def shortname(filename: str, maxLength: int) -> str:
 
 
 
-
 #st.set_page_config(layout="wide")
 
 # title
-st.title("USAT: Usabilla to Attrakdiff")
+st.title("PLADIF: Plot Attrakdiff graphs from CSV files")
+
 
 # sidebar (to upload files)
 with st.sidebar:
-	st.header("Add here your Usabilla files")
+	st.markdown("<h1 style='text-align: center;'>Add here your Usabilla files</h1>", unsafe_allow_html=True)
+	#st.header("Add here your Usabilla files")
 	# file uploader
 	files = st.file_uploader("", type=['csv'], accept_multiple_files=True, help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).")
 	# error message array
 	msg = st.empty()
 
-	data = {}
-	try:
-		data = {shortname(f.name, 20): loadCSV(f) for f in files}
-	except ValueError as e:
-		msg.error(str(e))
+	# spacing
+	for _ in range(4):
+		st.write("")
+
+	# options
+	with st.expander("Options"):
+		default_lang = 1 if 'fr' in getdefaultlocale()[0].lower() else (2 if 'de' in getdefaultlocale()[0].lower() else 0)
+		langOption = {"EN": "English", "FR": "Français", "DE": "Deutsch"}
+		lang = st.selectbox("Choose a language", langOption.keys(), format_func=lambda x: langOption.get(x), index=default_lang, help="Change the language used in the plots.", disabled=True)
+		stdOption = {0: "No", 1: "Yes at 67%", 2: "Yes at 90%", 3: "Yes at 95%"}
+		std = st.selectbox("Plot confidence interval ?", stdOption.keys(), format_func=lambda x: stdOption.get(x), help="Display in the graph the confidence interval (at 67%, 90% or 95%) or not.", index=1, disabled=False)
 
 
+
+
+# load the data
+data = {}
+try:
+	data = {shortname(f.name, 20): loadCSV(f) for f in files}
+except ValueError as e:
+	msg.error(str(e))
 
 if data:
 	# mean values QP, QHI, QHS, ATT
@@ -94,3 +109,22 @@ if data:
 	st.pyplot(fig)
 
 
+
+# footer
+footer="""<style>
+.footer {
+position: fixed;
+left: 0;
+bottom: 0;
+width: 100%;
+background-color: white;
+color: black;
+text-align: center;
+}
+</style>
+<hr/>
+<div class="footer">
+<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a> is a small open source tool to draw attrakdiff plots, ©️ T. Hilaire, 2022.</p>
+</div>
+"""
+st.markdown(footer, unsafe_allow_html=True)

@@ -1,4 +1,4 @@
-""""This file is part of USAT.
+""""This file is part of PLADIF.
 
 	MIT License
 
@@ -23,13 +23,13 @@
 	SOFTWARE.
 
 
-USAT is a simple tool that taks survey from Usabilla and plot attrakdiff plots.
+PLADIF is a simple tool that plot attrakdiff graphs from CSV files (like those from Usabilla).
 It is written by Thibault Hilaire
 
 File: setup.py
 Date: Feb 2022
 
-	setup.py file to install USAT
+	setup.py file to install PLADIF
 """
 
 
@@ -42,24 +42,24 @@ def readme():
         return f.read()
 
 
-setup(name='USAT',
+setup(name='PLADIF',
       version='0.1',
-      description='A simple tool that taks survey from Usabilla and plot attrakdiff plots',
+      description="PLADIF is a simple tool that plot attrakdiff graphs from CSV files (like those from Usabilla)",
       long_description=readme(),
       classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.9',
-        'Topic :: Education',
-        'Intended Audience :: Science/Research'
+        'Topic :: Scientific/Engineering :: Human Machine Interfaces',
+        'Intended Audience :: Other Audience'
       ],
-      keywords='Usabilla attrakdiff',
-      url='https://github.com/thilaire/USAT',
+      keywords='CSV, attrakdiff, Usabilla',
+      url='https://github.com/thilaire/PLADIF',
       author='Thibault Hilaire',
       author_email='thibault@docmatic.fr',
       license='MIT',
       install_requires=['matplotlib', 'pandas', 'streamlit'],
-      entry_points={'console_scripts': ['USAT=src.USAT']},
+      entry_points={'console_scripts': ['runPLADIF=src.PLADIF']},
       include_package_data=True,
       zip_safe=False
 )
