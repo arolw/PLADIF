@@ -44,31 +44,49 @@ from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
 # https://lokalise.com/blog/beginners-guide-to-python-i18n/
 
 
+def updateFileList():
+	"""update the list of files
+	(do not load already load file, remove from the dict the deleted files
+	we need to do that to deal with the lack of information given by on_change that call that function"""
+	# check the file(s) that are not yet in the dict, and load them
+	newfiles = [f for f in st.session_state.csvFile if f.name not in st.session_state.data]
+	if newfiles:
+		for f in newfiles:
+			try:
+				print("LOAD "+f.name)
+				st.session_state.data[f.name] = loadCSV(f)
+			except ValueError as e:
+				msg.error(str(e))
+	# check the file(s) that are not anymore in the dict, and del them
+	delfilenames = [name for name in st.session_state.data.keys() if name not in [f.name for f in st.session_state.csvFile]]
+	if delfilenames:
+		for name in delfilenames:
+			print("DELETE "+name)
+			del st.session_state.data[name]
 
-def shortname(filename: str, maxLength: int) -> str:
-	"""shorten a filename such that it doesn't exceed maxLength char
-	by adding ... in the middle"""
-	filename = splitext(filename)[0]
-	if len(filename) > maxLength:
-		return filename[0:maxLength//2-1] + "..." + filename[-maxLength//2:]
-	else:
-		return filename
 
 
+# st.session_state.data stores all the data: {filename: DataFrame}
+if 'data' not in st.session_state:
+	st.session_state.data = {}
 
 
 #st.set_page_config(layout="wide")
-
 # title
 st.title("PLADIF: Plot Attrakdiff graphs from CSV files")
 
-
 # sidebar (to upload files)
 with st.sidebar:
-	st.markdown("<h1 style='text-align: center;'>Add here your Usabilla files</h1>", unsafe_allow_html=True)
-	#st.header("Add here your Usabilla files")
+	st.markdown("<h1 style='text-align: center;'>Add here your CSV files</h1>", unsafe_allow_html=True)
+
+	# CSV options
+	with st.expander("CSV options"):
+		CSVtype = {True: "Usabilla CSV file (UTF16, tab as delimiter)", False: "CSV file (UTF8 and coma as delimiter)"}
+		CSV = st.selectbox("Choose a CSV type", CSVtype.keys(), format_func=lambda x: CSVtype.get(x),
+			index=0, help="Choose the type of CSV file.")
+
 	# file uploader
-	files = st.file_uploader("", type=['csv'], accept_multiple_files=True, help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).")
+	files = st.file_uploader("", type=['csv'], accept_multiple_files=True, help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).", on_change=updateFileList, key='csvFile')
 	# error message array
 	msg = st.empty()
 
@@ -77,7 +95,7 @@ with st.sidebar:
 		st.write("")
 
 	# options
-	with st.expander("Options"):
+	with st.expander("Plot options"):
 		default_lang = 1 if 'fr' in getdefaultlocale()[0].lower() else (2 if 'de' in getdefaultlocale()[0].lower() else 0)
 		langOption = {"EN": "English", "FR": "Français", "DE": "Deutsch"}
 		lang = st.selectbox("Choose a language", langOption.keys(), format_func=lambda x: langOption.get(x), index=default_lang, help="Change the language used in the plots.", disabled=True)
@@ -87,25 +105,25 @@ with st.sidebar:
 
 
 
-# load the data
-data = {}
-try:
-	data = {shortname(f.name, 20): loadCSV(f) for f in files}
-except ValueError as e:
-	msg.error(str(e))
+# # load the data
+# data = {}
+# try:
+# 	data = {shortname(f.name, 20): loadCSV(f) for f in files}
+# except ValueError as e:
+# 	msg.error(str(e))
 
-if data:
+if st.session_state.data:
 	# mean values QP, QHI, QHS, ATT
 	fig, ax = plt.subplots()
-	plotMeanValues(fig, ax, data)
+	plotMeanValues(fig, ax, st.session_state.data)
 	st.pyplot(fig)
 	# pair words plot
 	fig, ax = plt.subplots()
-	plotWordPair(fig, ax, data)
+	plotWordPair(fig, ax, st.session_state.data)
 	st.pyplot(fig)
 	# attrakdiff
 	fig, ax = plt.subplots()
-	attraldiff = plotAttrakdiff(fig, ax, data)
+	attraldiff = plotAttrakdiff(fig, ax, st.session_state.data)
 	st.pyplot(fig)
 
 
