@@ -32,6 +32,9 @@ Date: Feb 2022
 	some constants and naming
 """
 
+from collections import OrderedDict
+
+
 #TODO: add english (and german) translation
 
 # items = {
@@ -48,42 +51,42 @@ titles = {
 	"QHI": "Qualité hédonique - identification",
 	"ATT": "Attrativité globale"
 }
+# pairs of word, ordered in the order we want them on the graph (QP, QHS, QHI and APP)
+pairs = OrderedDict(
+	QP1=("Technique", "Humain"),
+	QP2=("Compliqué", "Simple"),
+	QP3=("Pas pratique", "Pratique"),
+	QP4=("Fastidieux", "Efficace"),
+	QP5=("Imprévisible", "Prévisible"),
+	QP6=("Confus", "Clair"),
+	QP7=("Incontrôlable", "Maîtrisable"),
 
-pairs = {
-	"ATT1": ("Déplaisant", "Plaisant"),
-	"ATT2": ("Laid", "Beau"),
-	"ATT3": ("Désagréable", "Agréable"),
-	"ATT4": ("Rebutant", "Attirant"),
-	"ATT5": ("Mauvais", "Bon"),
-	"ATT6": ("Repoussant", "Attrayant"),
-	"ATT7": ("Décourageant", "Motivant"),
+	QHS1=("Conventionnel", "Original"),
+	QHS2=("Sans imagination", "Créatif"),
+	QHS3=("Prudent", "Audacieux"),
+	QHS4=("Conservateur", "Novateur"),
+	QHS5=("Ennuyeux", "Captivant"),
+	QHS6=("Peu exigeant", "Challenging"),
+	QHS7=("Commun", "Nouveau"),
 
-	"QHI1": ("M’isole", "Me sociabilise"),
-	"QHI2": ("Amateur", "Professionnel"),
-	"QHI3": ("De mauvais goût", "De bon goût"),
-	"QHI4": ("Bas de gamme", "Haut de gamme"),
-	"QHI5": ("M’exclut", "M’intègre"),
-	"QHI6": ("Me sépare des autres", "Me rapproche des autres"),
-	"QHI7": ("Non présentable", "Présentable"),
+	QHI1=("M’isole", "Me sociabilise"),
+	QHI2=("Amateur", "Professionnel"),
+	QHI3=("De mauvais goût", "De bon goût"),
+	QHI4=("Bas de gamme", "Haut de gamme"),
+	QHI5=("M’exclut", "M’intègre"),
+	QHI6=("Me sépare des autres", "Me rapproche des autres"),
+	QHI7=("Non présentable", "Présentable"),
 
-	"QHS1": ("Conventionnel", "Original"),
-	"QHS2": ("Sans imagination", "Créatif"),
-	"QHS3": ("Prudent", "Audacieux"),
-	"QHS4": ("Conservateur", "Novateur"),
-	"QHS5": ("Ennuyeux", "Captivant"),
-	"QHS6": ("Peu exigeant", "Challenging"),
-	"QHS7": ("Commun", "Nouveau"),
+	ATT1=("Déplaisant", "Plaisant"),
+	ATT2=("Laid", "Beau"),
+	ATT3=("Désagréable", "Agréable"),
+	ATT4=("Rebutant", "Attirant"),
+	ATT5=("Mauvais", "Bon"),
+	ATT6=("Repoussant", "Attrayant"),
+	ATT7=("Décourageant", "Motivant")
+)
 
-	"QP1": ("Technique", "Humain"),
-	"QP2": ("Compliqué", "Simple"),
-	"QP3": ("Pas pratique", "Pratique"),
-	"QP4": ("Fastidieux", "Efficace"),
-	"QP5": ("Imprévisible", "Prévisible"),
-	"QP6": ("Confus", "Clair"),
-	"QP7": ("Incontrôlable", "Maîtrisable")
-}
-
-order_short = []
+order_short = ["QP2*", 'ATT2', 'QP3*', 'QHI3*', 'QP5*', "QHI4", "QHS2", "ATT5*", "QP6", "QHS5"]
 order_long = [
 	"QP1*", "QHI1", "ATT1*", "QHS1*", "QP2*", "QHI2*", "ATT2", "QP3", "ATT3*, QP4",
 	"QHI3*", "QP5*", "QHI4", "QHI5", "QHI6*", "QHI7", "ATT4", "QHS2", "ATT5*",

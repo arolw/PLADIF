@@ -1,8 +1,41 @@
-import streamlit as st
+""""This file is part of USAT.
+
+	MIT License
+
+	Copyright (c) 2022 - Thibault Hilaire
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
+
+
+USAT is a simple tool that taks survey from Usabilla and plot attrakdiff plots.
+It is written by Thibault Hilaire
+
+File: USAT.py
+Date: Feb 2022
+
+	main file with the interactions
+"""
+
 
 import streamlit as st
-import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
+from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
 
 
 # TODO: think about i18n !
@@ -11,65 +44,61 @@ import numpy as np
 # ('en_GB', 'cp1252')
 # + https://lokalise.com/blog/beginners-guide-to-python-i18n/
 
+
+
+def shortname(filename: str, maxLength: int) -> str:
+	"""shorten a filename such that it doesn't exceed maxLength char
+	by adding ... in the middle"""
+	if len(filename) > maxLength:
+		return filename[0:maxLength//2-1] + "..." + filename[-maxLength//2:]
+	else:
+		return filename
+
+
+
+
+
 #st.set_page_config(layout="wide")
 
 # title
 st.title("USAT: Usabilla to Attrakdiff")
-st.header("Add your Usabilla files")
 
-
-
-
-
-
-def remove(i):
-	del st.session_state.tab[i]
-
-# files
-if 'tab' not in st.session_state:
-	st.session_state.tab = []
-
-
-with st.form("Add some Usabilla data"):
-	file = st.file_uploader("Upload a csv file", type=['csv'], accept_multiple_files=False, help='Add here your Usabilla csv file')
-	if file:
-		label = st.text_input("Label for file "+file.name, help="Indicate here the label for these data")
+# sidebar (to upload files)
+with st.sidebar:
+	st.header("Add here your Usabilla files")
+	# file uploader
+	files = st.file_uploader("", type=['csv'], accept_multiple_files=True, help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).")
+	# error message array
 	msg = st.empty()
-	# Every form must have a submit button.
-	submitted = st.form_submit_button("Submit")
-	if submitted:
-		if not label:
-			msg.error("A label is required")
-		elif not file:
-			msg.error("A file is required")
-		elif label in [x[1] for x in st.session_state.tab]:
-			msg.error("Duplicate label")
-		else:
-			msg.empty()
-			st.session_state.tab.append((file.name, label))
+	# label for the files
+	for f in files:
+		st.text_input("Label for file " + shortname(f.name, 20), help="Indicate here the label for these data", key='lab'+str(f.id))
 
-columns = st.columns((1,4,4,1))
-for col, name in zip(columns, ["plot", "filename", "label", ""]):
-	col.write(name)
-for i, t in enumerate(st.session_state.tab):
-	check = columns[0].empty()
-	check.checkbox("", key='check'+str(i))
-	columns[1].write(t[0])
-	columns[2].write(t[1])
-	bt = columns[3].empty()
-	bt.button("❌", on_click=remove, args=(i,), key='del'+str(i))
+	try:
+		data = {st.session_state['lab' + str(f.id)]: loadCSV(f) for f in files}
+	except ValueError as e:
+		msg.error(str(e))
+
+	# plot button
+	_, rightCol = st.columns((1, 1))
+	submitted = rightCol.button("Plot the attrackdiff !", disabled=not files or "" in data)
 
 
 
+import pandas as pd
+import numpy as np
+if 'fg' in data:
+	# mean values QP, QHI, QHS, ATT
+	fig, ax = plt.subplots()
+	plotMeanValues(fig, ax, data)
+	st.pyplot(fig)
+	# pair words plot
+	fig, ax = plt.subplots()
+	plotWordPair(fig, ax, data)
+	st.pyplot(fig)
+	# attrakdiff
+	fig, ax = plt.subplots()
+	attraldiff = plotAttrakdiff(fig, ax, data)
+	st.pyplot(fig)
 
 
-
-
-
-# col1, col2 = st.columns(2)
-# col1.file_uploader("Choose a file", accept_multiple_files=True)
-# col2.text_input("totoi")
-#
-# col1, col2 = st.columns(2)
-# col1.file_uploader("Choose", accept_multiple_files=True)
-# col2.text_input("titi")
