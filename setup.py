@@ -58,7 +58,8 @@ setup(name='USAT',
       author='Thibault Hilaire',
       author_email='thibault@docmatic.fr',
       license='MIT',
-      install_requires=['matplotlib', 'pandas', 'pywebio'],
+      install_requires=['matplotlib', 'pandas', 'streamlit'],
       entry_points={'console_scripts': ['USAT=src.USAT']},
       include_package_data=True,
-      zip_safe=False)
+      zip_safe=False
+)
