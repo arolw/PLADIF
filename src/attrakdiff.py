@@ -23,7 +23,7 @@
 	SOFTWARE.
 
 
-PLADIF is a simple tool that plot attrakdiff graphs from CSV files (like those from Usabilla).
+PLADIF is a simple tool that plots attrakdiff graphs from CSV files (like those from Usabilla).
 It is written by Thibault Hilaire
 
 File: attrakdiff.py
