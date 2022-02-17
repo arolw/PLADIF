@@ -70,24 +70,16 @@ with st.sidebar:
 	files = st.file_uploader("", type=['csv'], accept_multiple_files=True, help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).")
 	# error message array
 	msg = st.empty()
-	# label for the files
-	for f in files:
-		st.text_input("Label for file " + shortname(f.name, 20), help="Indicate here the label for these data", key='lab'+str(f.id))
 
+	data = {}
 	try:
-		data = {st.session_state['lab' + str(f.id)]: loadCSV(f) for f in files}
+		data = {shortname(f.name, 20): loadCSV(f) for f in files}
 	except ValueError as e:
 		msg.error(str(e))
 
-	# plot button
-	_, rightCol = st.columns((1, 1))
-	submitted = rightCol.button("Plot the attrackdiff !", disabled=not files or "" in data)
 
 
-
-import pandas as pd
-import numpy as np
-if 'fg' in data:
+if data:
 	# mean values QP, QHI, QHS, ATT
 	fig, ax = plt.subplots()
 	plotMeanValues(fig, ax, data)
