@@ -48,6 +48,7 @@ def updateFileList():
 	"""update the list of files
 	(do not load already load file, remove from the dict the deleted files
 	we need to do that to deal with the lack of information given by on_change that call that function"""
+	#TODO: we can do the same with cache (I guess)!
 	# check the file(s) that are not yet in the dict, and load them
 	newfiles = [f for f in st.session_state.csvFile if f.name not in st.session_state.data]
 	if newfiles:
@@ -86,7 +87,7 @@ if 'data' not in st.session_state:
 	st.session_state.data = {}
 
 
-#st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 # title
 st.markdown("<h1 style='text-align:center;'>PLADIF: Plot Attrakdiff graphs from CSV files<h1/>", unsafe_allow_html=True)
 
@@ -114,23 +115,32 @@ with st.sidebar:
 		default_lang = 1 if 'fr' in getdefaultlocale()[0].lower() else (2 if 'de' in getdefaultlocale()[0].lower() else 0)
 		langOption = {"EN": "English", "FR": "Français", "DE": "Deutsch"}
 		lang = st.selectbox("Choose a language", langOption.keys(), format_func=lambda x: langOption.get(x), index=default_lang, help="Change the language used in the plots.", disabled=True)
-		stdOption = {0: "No", 1: "Yes at 67%", 2: "Yes at 90%", 3: "Yes at 95%"}
+		stdOption = {0: "No", 0.10: "Yes 10%", 0.33:"Yes 33%", 0.5:"Yes 50%", 0.68: "Yes at 68%", 0.95: "Yes at 95%", 0.997: "Yes at 99.7%"}
 		std = st.selectbox("Plot confidence interval ?", stdOption.keys(), format_func=lambda x: stdOption.get(x), help="Display in the graph the confidence interval (at 67%, 90% or 95%) or not.", index=1, disabled=False)
 
 
 # plot the graphs and data tables
 if st.session_state.data:
 	# mean values QP, QHI, QHS, ATT
-	figure(plotMeanValues)
+	col1, col2 = st.columns(2)
+	with col1:
+		mv = figure(plotMeanValues)
+	with col2:
+		st.table(mv)
 
 	# pair words plot
-	figure(plotWordPair)
+	col1, col2 = st.columns(2)
+	with col1:
+		pw = figure(plotWordPair)
+	with col2:
+		st.table(pw)
 
 	# attrakdiff
-	attrakdiff = figure(plotAttrakdiff)
-	d = pd.DataFrame.from_dict(attrakdiff).T
-	d.columns = ['QP', 'QH', 'var QP', 'var QH']
-	st.table(d)
+	col1, col2 = st.columns(2)
+	with col1:
+		attrakdiff = figure(plotAttrakdiff, alpha=std)
+	with col2:
+		st.table(attrakdiff)
 
 
 # footer
@@ -139,7 +149,7 @@ position: fixed; left: 0; bottom: 0; width: 100%; background-color: white; color
 }
 </style>
 <div class="footer">
-<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a> is a small open source tool to draw attrakdiff plots, 
+<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a> is a small open source tool to draw attrakdiff plots from CSV files. &nbsp;&nbsp;&nbsp; 
 ©️ T. Hilaire, 2022.</p>
 </div>
 """
