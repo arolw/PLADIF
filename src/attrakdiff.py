@@ -36,15 +36,29 @@ Date: Feb 2022
 from typing import Dict, List, TypeVar
 from pandas import read_excel, DataFrame, read_csv
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+from scipy import stats
 from math import sqrt
 from io import BytesIO
+import pandas as pd
 
-from matplotlib.patches import Rectangle
 
 
 from naming import titles, order_long, order_short, pairs
 
-# ["%s - %s" % (pairs[col[:-1]] if '*' in col else pairs[col]) for col in Tab.columns]
+
+
+def interval(data, alpha):
+	"""Apply Student's t-distribution to get the confidence interval around the mean
+	according to alpha (alpha=0.05 for a 95% confidence interval)
+	returns the mean (center of the interval) and the interval (center of the interval)
+	"""
+	mean = data.mean()
+	#return mean, (mean-data.std()/sqrt(2), mean+data.std()/sqrt(2))
+	return mean, stats.t.interval(alpha, len(data)-1, loc=mean, scale=stats.sem(data))
+	#return mean, (mean-1.895*stats.sem(data)/sqrt(len(data)-1), mean+1.895*stats.sem(data)/sqrt(len(data)-1))
+
+
 
 
 def loadCSV(file: BytesIO):
@@ -91,24 +105,41 @@ def plotMeanValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	data = data.reindex(cat.keys())
 	data.plot(ax=ax, grid=True, marker='o', xlabel='Dimension', ylabel='Valeur moyenne', ylim=[-3, 3])
 	plt.setp(ax.get_xticklabels(), y=0.5)
+	return data
 
 
 
 def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
+	#
+	columns = datas[next(iter(datas))].columns
+	plt.plot([0, 0], [len(columns) + 0.5, 0.5], 'k')
 	# plot each line
+	dd = DataFrame.from_dict({name: {col: dF[col].mean().T for col in columns} for name, dF in datas.items()})
 	for name, data in datas.items():
 		val = data.mean().T
 		plt.plot(val, range(len(val), 0, -1), 's-')
 	# set axes, etc.
-	labels = ["%s - %s" % pairs[col] for col in datas[next(iter(datas))].T.index] + [""]
-	labels.reverse()
-	ax.set_yticks(range(len(labels)), labels=labels, )
+	labelsL = [pairs[col][0] for col in datas[next(iter(datas))].T.index] + [""]
+	labelsR = [pairs[col][1] for col in datas[next(iter(datas))].T.index] + [""]
+	labelsL.reverse()
+	labelsR.reverse()
+	ax.set_yticks(range(len(labelsL)), labels=labelsL)
+	ax.set_ylim(len(columns)+0.5, 0.5)
+	axR = ax.twinx()
+	axR.set_yticks(range(len(labelsR)), labels=labelsR)
+	axR.set_ylim(len(columns)+0.5, 0.5)
 	plt.xlim([-3, 3])
+
 	ax.grid(visible=True)
+	ax.set_box_aspect(1.25)
+
+	return dd
 
 
 
-def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
+
+
+def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha):
 	plt.xlim([-3, 3])
 	plt.ylim([-3, 3])
 	ax.xaxis.set_ticks([-3, -1, 1, 3])
@@ -129,14 +160,22 @@ def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	for name, data in datas.items():
 		QH = data[cat["QHI"]+cat["QHS"]]
 		QP = data[cat["QP"]]
-		x, y = QP.stack().mean(), QH.stack().mean()
-		wx, wy = sqrt((QP.T.std() ** 2).mean()), sqrt((QH.T.std() ** 2).mean())
-		plt.plot(x, y, 'o')
-		ax.add_patch(Rectangle((x - wx, y - wy), 2 * wx, 2 * wy, fill=True, alpha=0.2))
-		attr[name] = [x, y, wy, wy]
-		print("QP=%.2f, QH=%.2f" % (x, y))
 
-	return attr
+		pd.options.display.max_rows = 999
+		print("QP=", QP.stack())
+		print("QH=", QH.stack())
+
+		x, ix = interval(QP.stack(), alpha)
+		y, iy = interval(QH.stack(), alpha)
+
+		print("x=", x, "  ix=", ix)
+		print("y=", x, "  iy=", iy)
+		plt.plot(x, y, 'o')
+		if alpha:
+			ax.add_patch(Rectangle((ix[0], iy[0]), ix[1]-ix[0], iy[1]-iy[0], fill=True, alpha=0.2))
+		attr[name] = {"QP":x, "QH":y}
+
+	return pd.DataFrame.from_dict(attr)
 
 # plt.style.use('default')
 #
@@ -150,5 +189,5 @@ if __name__ == '__main__':
 	#fig, ax = plt.subplots()
 	#plotWordPair({'toto': X})
 	fig, ax = plt.subplots()
-	plotAttrakdiff({'toto': X})
+	plotWordPair(fig, ax, {'toto': X})
 	plt.show()
