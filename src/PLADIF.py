@@ -31,13 +31,16 @@ Date: Feb 2022
 
 	main file with the interactions
 """
-
-
+import pandas as pd
 import streamlit as st
-from os.path import splitext
+from tempfile import TemporaryDirectory
+from os.path import join
 from locale import getdefaultlocale
 import matplotlib.pyplot as plt
 from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
+
+
+tmpFolder = TemporaryDirectory()
 
 
 # TODO: think about i18n !
@@ -65,6 +68,16 @@ def updateFileList():
 			del st.session_state.data[name]
 
 
+def figure(fct):
+	fig, ax = plt.subplots()
+	ret = fct(fig, ax, st.session_state.data)
+	st.pyplot(fig)
+	imgFilename = join(tmpFolder.name, fct.__name__+".jpg")
+	with open(imgFilename, 'w') as temp:
+		plt.savefig(temp, format='jpg')
+	with open(imgFilename, 'rb') as temp:
+		st.download_button(label="Download jpeg", data=temp, file_name=fct.__name__+".jpg", mime="image/jpeg")
+	return ret
 
 # st.session_state.data stores all the data: {filename: DataFrame}
 if 'data' not in st.session_state:
@@ -83,7 +96,7 @@ with st.sidebar:
 	with st.expander("CSV options"):
 		CSVtype = {True: "Usabilla CSV file (UTF16, tab as delimiter)", False: "CSV file (UTF8 and coma as delimiter)"}
 		CSV = st.selectbox("Choose a CSV type", CSVtype.keys(), format_func=lambda x: CSVtype.get(x),
-			index=0, help="Choose the type of CSV file.")
+			index=0, help="Choose the type of CSV file.", disabled=True)
 
 	# file uploader
 	files = st.file_uploader("", type=['csv'], accept_multiple_files=True, help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).", on_change=updateFileList, key='csvFile')
@@ -112,19 +125,21 @@ with st.sidebar:
 # except ValueError as e:
 # 	msg.error(str(e))
 
+import tempfile
+
 if st.session_state.data:
 	# mean values QP, QHI, QHS, ATT
-	fig, ax = plt.subplots()
-	plotMeanValues(fig, ax, st.session_state.data)
-	st.pyplot(fig)
+	figure(plotMeanValues)
+
 	# pair words plot
-	fig, ax = plt.subplots()
-	plotWordPair(fig, ax, st.session_state.data)
-	st.pyplot(fig)
+	figure(plotWordPair)
 	# attrakdiff
-	fig, ax = plt.subplots()
-	attraldiff = plotAttrakdiff(fig, ax, st.session_state.data)
-	st.pyplot(fig)
+
+	attrakdiff = figure(plotAttrakdiff)
+	d = pd.DataFrame.from_dict(attrakdiff).T
+	d.columns = ['QP', 'QH', 'var QP', 'var QH']
+	st.table(d)
+
 
 
 
@@ -140,7 +155,6 @@ color: black;
 text-align: center;
 }
 </style>
-<hr/>
 <div class="footer">
 <p><a href="https://github.com/thilaire/PLADIF">PLADIF</a> is a small open source tool to draw attrakdiff plots, ©️ T. Hilaire, 2022.</p>
 </div>

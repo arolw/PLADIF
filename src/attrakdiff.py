@@ -132,7 +132,7 @@ def plotAttrakdiff(fig, ax, datas: Dict[str, DataFrame]):
 		wx, wy = sqrt((QP.T.std() ** 2).mean()), sqrt((QH.T.std() ** 2).mean())
 		plt.plot(x, y, 'o')
 		ax.add_patch(Rectangle((x - wx, y - wy), 2 * wx, 2 * wy, fill=True, alpha=0.2))
-		attr[name] = (x, y), (wy, wy)
+		attr[name] = [x, y, wy, wy]
 		print("QP=%.2f, QH=%.2f" % (x, y))
 
 	return attr
