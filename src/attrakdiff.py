@@ -41,6 +41,7 @@ from io import BytesIO
 
 from matplotlib.patches import Rectangle
 
+
 from naming import titles, order_long, order_short, pairs
 
 # ["%s - %s" % (pairs[col[:-1]] if '*' in col else pairs[col]) for col in Tab.columns]
@@ -83,7 +84,7 @@ def cat2dict(data: DataFrame) -> Dict[str, List[str]]:
 	return {name: [col for col in data.columns if name in col] for name in titles.keys()}
 
 
-def plotMeanValues(fig, ax, datas: Dict[str, DataFrame]):
+def plotMeanValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	"""Returns the dataFrame with the mean values"""
 	cat = cat2dict(datas[next(iter(datas))])
 	data = DataFrame.from_dict({name: {name: dF[cat].mean().mean() for name, cat in cat.items()} for name, dF in datas.items()})
@@ -93,7 +94,7 @@ def plotMeanValues(fig, ax, datas: Dict[str, DataFrame]):
 
 
 
-def plotWordPair(fig, ax, datas: Dict[str, DataFrame]):
+def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	# plot each line
 	for name, data in datas.items():
 		val = data.mean().T
@@ -107,7 +108,7 @@ def plotWordPair(fig, ax, datas: Dict[str, DataFrame]):
 
 
 
-def plotAttrakdiff(fig, ax, datas: Dict[str, DataFrame]):
+def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	plt.xlim([-3, 3])
 	plt.ylim([-3, 3])
 	ax.xaxis.set_ticks([-3, -1, 1, 3])
