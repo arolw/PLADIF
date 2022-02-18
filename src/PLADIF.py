@@ -40,9 +40,6 @@ import matplotlib.pyplot as plt
 from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
 
 
-tmpFolder = TemporaryDirectory()
-
-
 # TODO: think about i18n !
 # https://lokalise.com/blog/beginners-guide-to-python-i18n/
 
@@ -56,7 +53,6 @@ def updateFileList():
 	if newfiles:
 		for f in newfiles:
 			try:
-				print("LOAD "+f.name)
 				st.session_state.data[f.name] = loadCSV(f)
 			except ValueError as e:
 				msg.error(str(e))
@@ -64,13 +60,14 @@ def updateFileList():
 	delfilenames = [name for name in st.session_state.data.keys() if name not in [f.name for f in st.session_state.csvFile]]
 	if delfilenames:
 		for name in delfilenames:
-			print("DELETE "+name)
 			del st.session_state.data[name]
 
 
-def figure(fct):
+def figure(fct, **kwargs):
+	"""Plot a figure (by calling `fct` with the data)
+	and add a `Download image` button"""
 	fig, ax = plt.subplots()
-	ret = fct(fig, ax, st.session_state.data)
+	ret = fct(fig, ax, st.session_state.data, **kwargs)
 	st.pyplot(fig)
 	imgFilename = join(tmpFolder.name, fct.__name__+".jpg")
 	with open(imgFilename, 'w') as temp:
@@ -79,6 +76,11 @@ def figure(fct):
 		st.download_button(label="Download jpeg", data=temp, file_name=fct.__name__+".jpg", mime="image/jpeg")
 	return ret
 
+
+# create a temporary folder, to put the image files
+tmpFolder = TemporaryDirectory()
+
+
 # st.session_state.data stores all the data: {filename: DataFrame}
 if 'data' not in st.session_state:
 	st.session_state.data = {}
@@ -86,7 +88,7 @@ if 'data' not in st.session_state:
 
 #st.set_page_config(layout="wide")
 # title
-st.title("PLADIF: Plot Attrakdiff graphs from CSV files")
+st.markdown("<h1 style='text-align:center;'>PLADIF: Plot Attrakdiff graphs from CSV files<h1/>", unsafe_allow_html=True)
 
 # sidebar (to upload files)
 with st.sidebar:
@@ -116,47 +118,29 @@ with st.sidebar:
 		std = st.selectbox("Plot confidence interval ?", stdOption.keys(), format_func=lambda x: stdOption.get(x), help="Display in the graph the confidence interval (at 67%, 90% or 95%) or not.", index=1, disabled=False)
 
 
-
-
-# # load the data
-# data = {}
-# try:
-# 	data = {shortname(f.name, 20): loadCSV(f) for f in files}
-# except ValueError as e:
-# 	msg.error(str(e))
-
-import tempfile
-
+# plot the graphs and data tables
 if st.session_state.data:
 	# mean values QP, QHI, QHS, ATT
 	figure(plotMeanValues)
 
 	# pair words plot
 	figure(plotWordPair)
-	# attrakdiff
 
+	# attrakdiff
 	attrakdiff = figure(plotAttrakdiff)
 	d = pd.DataFrame.from_dict(attrakdiff).T
 	d.columns = ['QP', 'QH', 'var QP', 'var QH']
 	st.table(d)
 
 
-
-
 # footer
-footer="""<style>
-.footer {
-position: fixed;
-left: 0;
-bottom: 0;
-width: 100%;
-background-color: white;
-color: black;
-text-align: center;
+footer = """<style> .footer {
+position: fixed; left: 0; bottom: 0; width: 100%; background-color: white; color: black; text-align: center;
 }
 </style>
 <div class="footer">
-<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a> is a small open source tool to draw attrakdiff plots, ©️ T. Hilaire, 2022.</p>
+<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a> is a small open source tool to draw attrakdiff plots, 
+©️ T. Hilaire, 2022.</p>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
