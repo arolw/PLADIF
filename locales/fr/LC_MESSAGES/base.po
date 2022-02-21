@@ -1,0 +1,151 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-21 14:58+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/PLADIF.py:78
+msgid "Download jpeg"
+msgstr "Télécharge le jpeg"
+
+#: src/PLADIF.py:115
+msgid "Language"
+msgstr "Langue"
+
+#: src/PLADIF.py:116
+msgid "Change the language used in the plots."
+msgstr "Changez la langue utilisée par PLADIF"
+
+#: src/PLADIF.py:121
+msgid "Add here your CSV files"
+msgstr "Ajoutez votre fichier CSV ici"
+
+#: src/PLADIF.py:124
+msgid "CSV options"
+msgstr "Options CSV"
+
+#: src/PLADIF.py:125
+msgid "Usabilla CSV file (UTF16, tab as delimiter)"
+msgstr "Fichier CSV Usabilla (UTF-16, tabulation)"
+
+#: src/PLADIF.py:125
+msgid "CSV file (UTF8 and coma as delimiter)"
+msgstr "Fichier CSV (UTF-8, virgule)"
+
+#: src/PLADIF.py:126
+msgid "Choose a CSV type"
+msgstr "Choisissez le format CSV"
+
+#: src/PLADIF.py:127
+msgid "Choose the type of CSV file."
+msgstr "Choisissez le format CSV"
+
+#: src/PLADIF.py:131
+msgid ""
+"The file must be a CSV file, with tab delimiter and UTF-16 encoding (as "
+"produced by Usabilla)."
+msgstr ""
+
+#: src/PLADIF.py:142
+msgid "Plot options"
+msgstr "Options de tracé"
+
+#: src/PLADIF.py:144
+msgid "Plot confidence interval ?"
+msgstr ""
+
+#: src/PLADIF.py:145
+msgid ""
+"Display in the graph the confidence interval (at 67%, 90% or 95%) or not."
+msgstr ""
+
+#: src/PLADIF.py:151
+msgid "PLADIF: Plot Attrakdiff graphs from CSV files"
+msgstr "PLADIF : Trace l'Attrakdiff à partir de fichiers CSV"
+
+#: src/PLADIF.py:178
+msgid "toto"
+msgstr "kjflkjjklkj"
+
+#: src/PLADIF.py:187
+msgid "is a small open source tool to draw attrakdiff plots from CSV files."
+msgstr "est un petit outil livre qui trace l'attrakdiff à partir de fichiers CSV."
+
+#: src/attrakdiff.py:74
+msgid ""
+"The csv file is not a valid Usabilla one (does not contain a 'URL' column) !"
+msgstr ""
+
+#: src/attrakdiff.py:78
+#, python-format
+msgid ""
+"The csv file is not a valid Usabilla one (doesn not have %d or %d useful "
+"columns)"
+msgstr ""
+
+#: src/attrakdiff.py:106
+msgid "Dimension"
+msgstr "Dimension"
+
+#: src/attrakdiff.py:106
+msgid "Valeur moyenne"
+msgstr "Valeur moyenne"
+
+#: src/attrakdiff.py:148
+msgid ""
+"too\n"
+"self-\n"
+"oriented"
+msgstr "Trop\norienté\nvers le soi"
+
+#: src/attrakdiff.py:149
+msgid ""
+"self-\n"
+"oriented"
+msgstr "orienté\nvers le soi"
+
+#: src/attrakdiff.py:150
+msgid "desired"
+msgstr "désiré"
+
+#: src/attrakdiff.py:151
+msgid "neutral"
+msgstr "neutre"
+
+#: src/attrakdiff.py:152
+msgid ""
+"taks-\n"
+"oriented"
+msgstr "orienté\ntâche"
+
+#: src/attrakdiff.py:153
+msgid "superfluous"
+msgstr "superflu"
+
+#: src/attrakdiff.py:154
+msgid ""
+"too\n"
+"task-\n"
+"oriented"
+msgstr "trop\norienté\ntâche"
+
+#: src/attrakdiff.py:155
+msgid "Pragmatic Quality"
+msgstr "Qualité Pragmatique"
+
+#: src/attrakdiff.py:156
+msgid "Hedonic Quality"
+msgstr "Qualité Hédonique"

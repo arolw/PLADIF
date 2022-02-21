@@ -45,8 +45,6 @@ import gettext
 
 from naming import titles, order_long, order_short, pairs
 
-_ = gettext.gettext
-
 
 def interval(data, alpha):
 	"""Apply Student's t-distribution to get the confidence interval around the mean
