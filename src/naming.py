@@ -34,50 +34,53 @@ Date: Feb 2022
 
 from collections import OrderedDict
 
+# create dummy _ fct (so that gettext can parse dict)
+def _(x): return x
+
 # language options
 langOption = OrderedDict(en="English", fr="Français", de="Deutsch")
 
 # categories title
 titles = {
-	"QP": "Pragmatic Quality",
-	"QHS": "Hedonic Quality - Stimulation",
-	"QHI": "Hedonic Quality - Identify",
-	"ATT": "Attrativeness"
+	"QP": _("Pragmatic Quality"),
+	"QHS": _("Hedonic Quality - Stimulation"),
+	"QHI": _("Hedonic Quality - Identify"),
+	"ATT": _("Attrativeness")
 }
 
 # pairs of word, ordered in the order we want them on the graph (QP, QHS, QHI and APP)
 pairs = OrderedDict(
-	QP1=("Technique", "Humain"),
-	QP2=("Compliqué", "Simple"),
-	QP3=("Pas pratique", "Pratique"),
-	QP4=("Fastidieux", "Efficace"),
-	QP5=("Imprévisible", "Prévisible"),
-	QP6=("Confus", "Clair"),
-	QP7=("Incontrôlable", "Maîtrisable"),
+	QP1=(_("Technical"), _("Human")),
+	QP2=(_("Complicated"), _("Simple")),
+	QP3=(_("Impractical"), _("Pratical")),
+	QP4=(_("Cumbersome"), _("Straightforward")),
+	QP5=(_("Unpredictable"), _("Predictable")),
+	QP6=(_("Confusing"), _("Clearly structured")),
+	QP7=(_("Unruly"), _("Manageable")),
 
-	QHS1=("Conventionnel", "Original"),
-	QHS2=("Sans imagination", "Créatif"),
-	QHS3=("Prudent", "Audacieux"),
-	QHS4=("Conservateur", "Novateur"),
-	QHS5=("Ennuyeux", "Captivant"),
-	QHS6=("Peu exigeant", "Challenging"),
-	QHS7=("Commun", "Nouveau"),
+	QHS1=(_("Conventional"), _("Inventive")),
+	QHS2=(_("Unimaginative"), _("Creative")),
+	QHS3=(_("Cautious"), _("Bold")),
+	QHS4=(_("Conservative"), _("Innovative")),
+	QHS5=(_("Dull"), _("Captivating")),
+	QHS6=(_("Undemanding"), _("Challenging")),
+	QHS7=(_("Ordinary"), _("Novel")),
 
-	QHI1=("M’isole", "Me sociabilise"),
-	QHI2=("Amateur", "Professionnel"),
-	QHI3=("De mauvais goût", "De bon goût"),
-	QHI4=("Bas de gamme", "Haut de gamme"),
-	QHI5=("M’exclut", "M’intègre"),
-	QHI6=("Me sépare des autres", "Me rapproche des autres"),
-	QHI7=("Non présentable", "Présentable"),
+	QHI1=(_("Isolating"), _("Connective")),
+	QHI2=(_("Unprofessional"), _("Professional")),
+	QHI3=(_("Tacky"), _("Stylish")),
+	QHI4=(_("Cheap"), _("Premium")),
+	QHI5=(_("Alienating"), _("Integrating")),
+	QHI6=(_("Separates me"), _("Bring me closer")),
+	QHI7=(_("Unpresentable"), _("Presentable")),
 
-	ATT1=("Déplaisant", "Plaisant"),
-	ATT2=("Laid", "Beau"),
-	ATT3=("Désagréable", "Agréable"),
-	ATT4=("Rebutant", "Attirant"),
-	ATT5=("Mauvais", "Bon"),
-	ATT6=("Repoussant", "Attrayant"),
-	ATT7=("Décourageant", "Motivant")
+	ATT1=(_("Unpleasant"), _("Pleasant")),
+	ATT2=(_("Ugly"), _("Attractive")),
+	ATT3=(_("Disagreeable"), _("Likeable")),
+	ATT4=(_("Rejecting"), _("Inviting")),
+	ATT5=(_("Bad"), _("Good")),
+	ATT6=(_("Repelling"), _("Appealing")),
+	ATT7=(_("Discouraging"), _("Motivating"))
 )
 
 # short or long attrakdiff
@@ -87,3 +90,5 @@ order_long = [
 	"QHI3*", "QP5*", "QHI4", "QHI5", "QHI6*", "QHI7", "ATT4", "QHS2", "ATT5*",
 	'QP6', "ATT6", "QHS3*", "QHS4*", "QHS5", "QHS6", "ATT7*", "QHS7*", "QP7"
 ]
+
+del _

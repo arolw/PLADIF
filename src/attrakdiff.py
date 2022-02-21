@@ -69,11 +69,11 @@ def loadCSV(file: BytesIO):
 	try:
 		url_index = Tab.columns.get_loc("URL")
 	except KeyError:
-		raise ValueError(_("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !"))
+		raise ValueError("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !")
 	Tab.drop(columns=Tab.columns[url_index:], inplace=True)
 	# check the size and rename the columns
 	if len(Tab.columns) not in [len(order_short), len(order_long)]:
-		raise ValueError(_("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)") % (len(order_short), len(order_long)))
+		raise ValueError("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)" % (len(order_short), len(order_long)))
 	Tab.columns = order_short if len(Tab.columns) == len(order_short) else order_long
 	# normalize data in [-3,3]
 	for col, serie in Tab.items():
@@ -91,7 +91,6 @@ def loadCSV(file: BytesIO):
 def cat2dict(data: DataFrame) -> Dict[str, List[str]]:
 	"""Returns the dictionary of the categories used
 	Ex: {'QP': ['QP1','QP2'], 'ATT': ['ATT1']} """
-
 	# groups categories
 	return {name: [col for col in data.columns if name in col] for name in titles.keys()}
 
@@ -101,7 +100,7 @@ def plotMeanValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	cat = cat2dict(datas[next(iter(datas))])
 	data = DataFrame.from_dict({name: {name: dF[cat].mean().mean() for name, cat in cat.items()} for name, dF in datas.items()})
 	data = data.reindex(cat.keys())
-	data.plot(ax=ax, grid=True, marker='o', xlabel=_('Dimension'), ylabel=_('Valeur moyenne'), ylim=[-3, 3])
+	data.plot(ax=ax, grid=True, marker='o', xlabel=_('Dimension'), ylabel=_('Average value'), ylim=[-3, 3])
 	plt.setp(ax.get_xticklabels(), y=0.5)
 	return data
 
@@ -117,8 +116,8 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 		val = data.mean().T
 		plt.plot(val, range(len(val), 0, -1), 's-')
 	# set axes, etc.
-	labelsL = [pairs[col][0] for col in datas[next(iter(datas))].T.index] + [""]
-	labelsR = [pairs[col][1] for col in datas[next(iter(datas))].T.index] + [""]
+	labelsL = [_(pairs[col][0]) for col in datas[next(iter(datas))].T.index] + [""]
+	labelsR = [_(pairs[col][1]) for col in datas[next(iter(datas))].T.index] + [""]
 	labelsL.reverse()
 	labelsR.reverse()
 	ax.set_yticks(range(len(labelsL)), labels=labelsL)
@@ -132,9 +131,6 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	ax.set_box_aspect(1.25)
 
 	return dd
-
-
-
 
 
 def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha):
@@ -171,7 +167,7 @@ def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], a
 		plt.plot(x, y, 'o')
 		if alpha:
 			ax.add_patch(Rectangle((ix[0], iy[0]), ix[1]-ix[0], iy[1]-iy[0], fill=True, alpha=0.2))
-		attr[name] = {"QP":x, "QH":y}
+		attr[name] = {"QP": x, "QH": y}
 
 	return pd.DataFrame.from_dict(attr)
 

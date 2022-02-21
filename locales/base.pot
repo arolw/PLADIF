@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-21 14:58+0100\n"
+"POT-Creation-Date: 2022-02-21 18:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,135 +17,292 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/PLADIF.py:78
-msgid "Download jpeg"
-msgstr ""
-
-#: src/PLADIF.py:115
-msgid "Language"
-msgstr ""
-
-#: src/PLADIF.py:116
-msgid "Change the language used in the plots."
-msgstr ""
-
-#: src/PLADIF.py:121
-msgid "Add here your CSV files"
-msgstr ""
-
-#: src/PLADIF.py:124
-msgid "CSV options"
-msgstr ""
-
-#: src/PLADIF.py:125
-msgid "Usabilla CSV file (UTF16, tab as delimiter)"
-msgstr ""
-
-#: src/PLADIF.py:125
-msgid "CSV file (UTF8 and coma as delimiter)"
-msgstr ""
-
-#: src/PLADIF.py:126
-msgid "Choose a CSV type"
-msgstr ""
-
-#: src/PLADIF.py:127
-msgid "Choose the type of CSV file."
-msgstr ""
-
-#: src/PLADIF.py:131
-msgid ""
-"The file must be a CSV file, with tab delimiter and UTF-16 encoding (as "
-"produced by Usabilla)."
-msgstr ""
-
-#: src/PLADIF.py:142
-msgid "Plot options"
-msgstr ""
-
-#: src/PLADIF.py:144
-msgid "Plot confidence interval ?"
-msgstr ""
-
-#: src/PLADIF.py:145
-msgid ""
-"Display in the graph the confidence interval (at 67%, 90% or 95%) or not."
-msgstr ""
-
-#: src/PLADIF.py:151
-msgid "PLADIF: Plot Attrakdiff graphs from CSV files"
-msgstr ""
-
-#: src/PLADIF.py:178
-msgid "toto"
-msgstr ""
-
-#: src/PLADIF.py:187
-msgid "is a small open source tool to draw attrakdiff plots from CSV files."
-msgstr ""
-
-#: src/attrakdiff.py:74
-msgid ""
-"The csv file is not a valid Usabilla one (does not contain a 'URL' column) !"
-msgstr ""
-
-#: src/attrakdiff.py:78
-#, python-format
-msgid ""
-"The csv file is not a valid Usabilla one (doesn not have %d or %d useful "
-"columns)"
-msgstr ""
-
-#: src/attrakdiff.py:106
+#: src/attrakdiff.py:103
 msgid "Dimension"
 msgstr ""
 
-#: src/attrakdiff.py:106
-msgid "Valeur moyenne"
+#: src/attrakdiff.py:103
+msgid "Average value"
 msgstr ""
 
-#: src/attrakdiff.py:148
+#: src/attrakdiff.py:142
 msgid ""
 "too\n"
 "self-\n"
 "oriented"
 msgstr ""
 
-#: src/attrakdiff.py:149
+#: src/attrakdiff.py:143
 msgid ""
 "self-\n"
 "oriented"
 msgstr ""
 
-#: src/attrakdiff.py:150
+#: src/attrakdiff.py:144
 msgid "desired"
 msgstr ""
 
-#: src/attrakdiff.py:151
+#: src/attrakdiff.py:145
 msgid "neutral"
 msgstr ""
 
-#: src/attrakdiff.py:152
+#: src/attrakdiff.py:146
 msgid ""
 "taks-\n"
 "oriented"
 msgstr ""
 
-#: src/attrakdiff.py:153
+#: src/attrakdiff.py:147
 msgid "superfluous"
 msgstr ""
 
-#: src/attrakdiff.py:154
+#: src/attrakdiff.py:148
 msgid ""
 "too\n"
 "task-\n"
 "oriented"
 msgstr ""
 
-#: src/attrakdiff.py:155
+#: src/attrakdiff.py:149 src/naming.py:45
 msgid "Pragmatic Quality"
 msgstr ""
 
-#: src/attrakdiff.py:156
+#: src/attrakdiff.py:150
 msgid "Hedonic Quality"
+msgstr ""
+
+#: src/naming.py:46
+msgid "Hedonic Quality - Stimulation"
+msgstr ""
+
+#: src/naming.py:47
+msgid "Hedonic Quality - Identify"
+msgstr ""
+
+#: src/naming.py:48
+msgid "Attrativeness"
+msgstr ""
+
+#: src/naming.py:53
+msgid "Technical"
+msgstr ""
+
+#: src/naming.py:53
+msgid "Human"
+msgstr ""
+
+#: src/naming.py:54
+msgid "Complicated"
+msgstr ""
+
+#: src/naming.py:54
+msgid "Simple"
+msgstr ""
+
+#: src/naming.py:55
+msgid "Impractical"
+msgstr ""
+
+#: src/naming.py:55
+msgid "Pratical"
+msgstr ""
+
+#: src/naming.py:56
+msgid "Cumbersome"
+msgstr ""
+
+#: src/naming.py:56
+msgid "Straightforward"
+msgstr ""
+
+#: src/naming.py:57
+msgid "Unpredictable"
+msgstr ""
+
+#: src/naming.py:57
+msgid "Predictable"
+msgstr ""
+
+#: src/naming.py:58
+msgid "Confusing"
+msgstr ""
+
+#: src/naming.py:58
+msgid "Clearly structured"
+msgstr ""
+
+#: src/naming.py:59
+msgid "Unruly"
+msgstr ""
+
+#: src/naming.py:59
+msgid "Manageable"
+msgstr ""
+
+#: src/naming.py:61
+msgid "Conventional"
+msgstr ""
+
+#: src/naming.py:61
+msgid "Inventive"
+msgstr ""
+
+#: src/naming.py:62
+msgid "Unimaginative"
+msgstr ""
+
+#: src/naming.py:62
+msgid "Creative"
+msgstr ""
+
+#: src/naming.py:63
+msgid "Cautious"
+msgstr ""
+
+#: src/naming.py:63
+msgid "Bold"
+msgstr ""
+
+#: src/naming.py:64
+msgid "Conservative"
+msgstr ""
+
+#: src/naming.py:64
+msgid "Innovative"
+msgstr ""
+
+#: src/naming.py:65
+msgid "Dull"
+msgstr ""
+
+#: src/naming.py:65
+msgid "Captivating"
+msgstr ""
+
+#: src/naming.py:66
+msgid "Undemanding"
+msgstr ""
+
+#: src/naming.py:66
+msgid "Challenging"
+msgstr ""
+
+#: src/naming.py:67
+msgid "Ordinary"
+msgstr ""
+
+#: src/naming.py:67
+msgid "Novel"
+msgstr ""
+
+#: src/naming.py:69
+msgid "Isolating"
+msgstr ""
+
+#: src/naming.py:69
+msgid "Connective"
+msgstr ""
+
+#: src/naming.py:70
+msgid "Unprofessional"
+msgstr ""
+
+#: src/naming.py:70
+msgid "Professional"
+msgstr ""
+
+#: src/naming.py:71
+msgid "Tacky"
+msgstr ""
+
+#: src/naming.py:71
+msgid "Stylish"
+msgstr ""
+
+#: src/naming.py:72
+msgid "Cheap"
+msgstr ""
+
+#: src/naming.py:72
+msgid "Premium"
+msgstr ""
+
+#: src/naming.py:73
+msgid "Alienating"
+msgstr ""
+
+#: src/naming.py:73
+msgid "Integrating"
+msgstr ""
+
+#: src/naming.py:74
+msgid "Separates me"
+msgstr ""
+
+#: src/naming.py:74
+msgid "Bring me closer"
+msgstr ""
+
+#: src/naming.py:75
+msgid "Unpresentable"
+msgstr ""
+
+#: src/naming.py:75
+msgid "Presentable"
+msgstr ""
+
+#: src/naming.py:77
+msgid "Unpleasant"
+msgstr ""
+
+#: src/naming.py:77
+msgid "Pleasant"
+msgstr ""
+
+#: src/naming.py:78
+msgid "Ugly"
+msgstr ""
+
+#: src/naming.py:78
+msgid "Attractive"
+msgstr ""
+
+#: src/naming.py:79
+msgid "Disagreeable"
+msgstr ""
+
+#: src/naming.py:79
+msgid "Likeable"
+msgstr ""
+
+#: src/naming.py:80
+msgid "Rejecting"
+msgstr ""
+
+#: src/naming.py:80
+msgid "Inviting"
+msgstr ""
+
+#: src/naming.py:81
+msgid "Bad"
+msgstr ""
+
+#: src/naming.py:81
+msgid "Good"
+msgstr ""
+
+#: src/naming.py:82
+msgid "Repelling"
+msgstr ""
+
+#: src/naming.py:82
+msgid "Appealing"
+msgstr ""
+
+#: src/naming.py:83
+msgid "Discouraging"
+msgstr ""
+
+#: src/naming.py:83
+msgid "Motivating"
 msgstr ""

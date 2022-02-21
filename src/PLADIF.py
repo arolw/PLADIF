@@ -36,7 +36,7 @@ Date: Feb 2022
 import pandas as pd
 import streamlit as st
 from tempfile import TemporaryDirectory
-from os.path import join
+from os.path import join, splitext
 from locale import getdefaultlocale
 import matplotlib.pyplot as plt
 from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
@@ -55,11 +55,12 @@ def updateFileList():
 	if newfiles:
 		for f in newfiles:
 			try:
-				st.session_state.data[f.name] = loadCSV(f)
+				print("name=",splitext(f.name))
+				st.session_state.data[splitext(f.name)[0]] = loadCSV(f)
 			except ValueError as e:
 				msg.error(str(e))
 	# check the file(s) that are not anymore in the dict, and del them
-	delfilenames = [name for name in st.session_state.data.keys() if name not in [f.name for f in st.session_state.csvFile]]
+	delfilenames = [name for name in st.session_state.data.keys() if name not in [splitext(f.name)[0] for f in st.session_state.csvFile]]
 	if delfilenames:
 		for name in delfilenames:
 			del st.session_state.data[name]
@@ -106,6 +107,7 @@ if 'languages' not in st.session_state:
 # ====== Page ======
 
 st.set_page_config(layout="wide")
+
 
 
 # sidebar (to upload files)
@@ -173,8 +175,9 @@ if st.session_state.data:
 	with col1:
 		attrakdiff = figure(plotAttrakdiff, alpha=std)
 	with col2:
-		st.table(attrakdiff)
-
+		st.dataframe(attrakdiff, width=150)
+		st.metric("QH", 0.30)
+		st.metric("QP", 0.30)
 
 
 # footer

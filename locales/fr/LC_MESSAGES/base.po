@@ -1,151 +1,319 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# PLADIF translation.
+# Copyright (C) 2022
+# This file is distributed under the same license as the PLADIF package.
+# Thibault HILAIRE <thibault@docmatic.fr>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: PLADIF\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-21 14:58+0100\n"
+"POT-Creation-Date: 2022-02-21 18:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: Thibault Hilaire <thibault@docmatic.fr>\n"
+"Language: FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/PLADIF.py:78
-msgid "Download jpeg"
-msgstr "Télécharge le jpeg"
-
-#: src/PLADIF.py:115
-msgid "Language"
-msgstr "Langue"
-
-#: src/PLADIF.py:116
-msgid "Change the language used in the plots."
-msgstr "Changez la langue utilisée par PLADIF"
-
-#: src/PLADIF.py:121
-msgid "Add here your CSV files"
-msgstr "Ajoutez votre fichier CSV ici"
-
-#: src/PLADIF.py:124
-msgid "CSV options"
-msgstr "Options CSV"
-
-#: src/PLADIF.py:125
-msgid "Usabilla CSV file (UTF16, tab as delimiter)"
-msgstr "Fichier CSV Usabilla (UTF-16, tabulation)"
-
-#: src/PLADIF.py:125
-msgid "CSV file (UTF8 and coma as delimiter)"
-msgstr "Fichier CSV (UTF-8, virgule)"
-
-#: src/PLADIF.py:126
-msgid "Choose a CSV type"
-msgstr "Choisissez le format CSV"
-
-#: src/PLADIF.py:127
-msgid "Choose the type of CSV file."
-msgstr "Choisissez le format CSV"
-
-#: src/PLADIF.py:131
-msgid ""
-"The file must be a CSV file, with tab delimiter and UTF-16 encoding (as "
-"produced by Usabilla)."
-msgstr ""
-
-#: src/PLADIF.py:142
-msgid "Plot options"
-msgstr "Options de tracé"
-
-#: src/PLADIF.py:144
-msgid "Plot confidence interval ?"
-msgstr ""
-
-#: src/PLADIF.py:145
-msgid ""
-"Display in the graph the confidence interval (at 67%, 90% or 95%) or not."
-msgstr ""
-
-#: src/PLADIF.py:151
-msgid "PLADIF: Plot Attrakdiff graphs from CSV files"
-msgstr "PLADIF : Trace l'Attrakdiff à partir de fichiers CSV"
-
-#: src/PLADIF.py:178
-msgid "toto"
-msgstr "kjflkjjklkj"
-
-#: src/PLADIF.py:187
-msgid "is a small open source tool to draw attrakdiff plots from CSV files."
-msgstr "est un petit outil livre qui trace l'attrakdiff à partir de fichiers CSV."
-
-#: src/attrakdiff.py:74
-msgid ""
-"The csv file is not a valid Usabilla one (does not contain a 'URL' column) !"
-msgstr ""
-
-#: src/attrakdiff.py:78
-#, python-format
-msgid ""
-"The csv file is not a valid Usabilla one (doesn not have %d or %d useful "
-"columns)"
-msgstr ""
-
-#: src/attrakdiff.py:106
+#: src/attrakdiff.py:103
 msgid "Dimension"
 msgstr "Dimension"
 
-#: src/attrakdiff.py:106
-msgid "Valeur moyenne"
+#: src/attrakdiff.py:103
+msgid "Average value"
 msgstr "Valeur moyenne"
+
+#: src/attrakdiff.py:142
+msgid ""
+"too\n"
+"self-\n"
+"oriented"
+msgstr ""
+"Trop\n"
+"orienté\n"
+"vers le soi"
+
+#: src/attrakdiff.py:143
+msgid ""
+"self-\n"
+"oriented"
+msgstr ""
+"orienté\n"
+"vers le soi"
+
+#: src/attrakdiff.py:144
+msgid "desired"
+msgstr "désiré"
+
+#: src/attrakdiff.py:145
+msgid "neutral"
+msgstr "neutre"
+
+#: src/attrakdiff.py:146
+msgid ""
+"taks-\n"
+"oriented"
+msgstr ""
+"orienté\n"
+"tâche"
+
+#: src/attrakdiff.py:147
+msgid "superfluous"
+msgstr "superflu"
 
 #: src/attrakdiff.py:148
 msgid ""
 "too\n"
-"self-\n"
-"oriented"
-msgstr "Trop\norienté\nvers le soi"
-
-#: src/attrakdiff.py:149
-msgid ""
-"self-\n"
-"oriented"
-msgstr "orienté\nvers le soi"
-
-#: src/attrakdiff.py:150
-msgid "desired"
-msgstr "désiré"
-
-#: src/attrakdiff.py:151
-msgid "neutral"
-msgstr "neutre"
-
-#: src/attrakdiff.py:152
-msgid ""
-"taks-\n"
-"oriented"
-msgstr "orienté\ntâche"
-
-#: src/attrakdiff.py:153
-msgid "superfluous"
-msgstr "superflu"
-
-#: src/attrakdiff.py:154
-msgid ""
-"too\n"
 "task-\n"
 "oriented"
-msgstr "trop\norienté\ntâche"
+msgstr ""
+"trop\n"
+"orienté\n"
+"tâche"
 
-#: src/attrakdiff.py:155
+#: src/attrakdiff.py:149 src/naming.py:45
 msgid "Pragmatic Quality"
 msgstr "Qualité Pragmatique"
 
-#: src/attrakdiff.py:156
+#: src/attrakdiff.py:150
 msgid "Hedonic Quality"
 msgstr "Qualité Hédonique"
+
+#: src/naming.py:46
+#, fuzzy
+msgid "Hedonic Quality - Stimulation"
+msgstr "Qualité Hédonique - Stimulation"
+
+#: src/naming.py:47
+#, fuzzy
+msgid "Hedonic Quality - Identify"
+msgstr "Qualité Hédonique - Identification"
+
+#: src/naming.py:48
+msgid "Attrativeness"
+msgstr "Attractivité globale"
+
+#: src/naming.py:53
+msgid "Technical"
+msgstr "Technique"
+
+#: src/naming.py:53
+msgid "Human"
+msgstr "Humain"
+
+#: src/naming.py:54
+msgid "Complicated"
+msgstr "Compliqué"
+
+#: src/naming.py:54
+msgid "Simple"
+msgstr "Simple"
+
+#: src/naming.py:55
+msgid "Impractical"
+msgstr "Pas pratique"
+
+#: src/naming.py:55
+msgid "Pratical"
+msgstr "Pratique"
+
+#: src/naming.py:56
+msgid "Cumbersome"
+msgstr "Fastidieux"
+
+#: src/naming.py:56
+msgid "Straightforward"
+msgstr "Efficace"
+
+#: src/naming.py:57
+msgid "Unpredictable"
+msgstr "Imprévisible"
+
+#: src/naming.py:57
+msgid "Predictable"
+msgstr "Prévisible"
+
+#: src/naming.py:58
+msgid "Confusing"
+msgstr "Confus"
+
+#: src/naming.py:58
+msgid "Clearly structured"
+msgstr "Clair"
+
+#: src/naming.py:59
+msgid "Unruly"
+msgstr "Incontrôlable"
+
+#: src/naming.py:59
+msgid "Manageable"
+msgstr "Maîtrisable"
+
+#: src/naming.py:61
+msgid "Conventional"
+msgstr "Conventionnel"
+
+#: src/naming.py:61
+msgid "Inventive"
+msgstr "Original"
+
+#: src/naming.py:62
+msgid "Unimaginative"
+msgstr "Sans imagination"
+
+#: src/naming.py:62
+msgid "Creative"
+msgstr "Créatif"
+
+#: src/naming.py:63
+msgid "Cautious"
+msgstr "Prudent"
+
+#: src/naming.py:63
+msgid "Bold"
+msgstr "Audacieux"
+
+#: src/naming.py:64
+msgid "Conservative"
+msgstr "Conservateur"
+
+#: src/naming.py:64
+msgid "Innovative"
+msgstr "Novateur"
+
+#: src/naming.py:65
+msgid "Dull"
+msgstr "Ennuyeux"
+
+#: src/naming.py:65
+msgid "Captivating"
+msgstr "Captivant"
+
+#: src/naming.py:66
+msgid "Undemanding"
+msgstr "Peu exigeant"
+
+#: src/naming.py:66
+msgid "Challenging"
+msgstr "Challenging"
+
+#: src/naming.py:67
+msgid "Ordinary"
+msgstr "Commun"
+
+#: src/naming.py:67
+msgid "Novel"
+msgstr "Nouveau"
+
+#: src/naming.py:69
+msgid "Isolating"
+msgstr "M’isole"
+
+#: src/naming.py:69
+msgid "Connective"
+msgstr "Me sociabilise"
+
+#: src/naming.py:70
+msgid "Unprofessional"
+msgstr "Amateur"
+
+#: src/naming.py:70
+msgid "Professional"
+msgstr "Professionnel"
+
+#: src/naming.py:71
+msgid "Tacky"
+msgstr "De mauvais goût"
+
+#: src/naming.py:71
+msgid "Stylish"
+msgstr "De bon goût"
+
+#: src/naming.py:72
+msgid "Cheap"
+msgstr "Bas de gamme"
+
+#: src/naming.py:72
+msgid "Premium"
+msgstr "Haut de gamme"
+
+#: src/naming.py:73
+msgid "Alienating"
+msgstr "M’exclut"
+
+#: src/naming.py:73
+msgid "Integrating"
+msgstr "M’intègre"
+
+#: src/naming.py:74
+msgid "Separates me"
+msgstr "Me sépare des autres"
+
+#: src/naming.py:74
+msgid "Bring me closer"
+msgstr "Me rapproche des autres"
+
+#: src/naming.py:75
+msgid "Unpresentable"
+msgstr "Non présentable"
+
+#: src/naming.py:75
+msgid "Presentable"
+msgstr "Présentable"
+
+#: src/naming.py:77
+msgid "Unpleasant"
+msgstr "Déplaisant"
+
+#: src/naming.py:77
+msgid "Pleasant"
+msgstr "Plaisant"
+
+#: src/naming.py:78
+msgid "Ugly"
+msgstr "Laid"
+
+#: src/naming.py:78
+msgid "Attractive"
+msgstr "Beau"
+
+#: src/naming.py:79
+msgid "Disagreeable"
+msgstr "Désagréable"
+
+#: src/naming.py:79
+msgid "Likeable"
+msgstr "Agréable"
+
+#: src/naming.py:80
+msgid "Rejecting"
+msgstr "Rebutant"
+
+#: src/naming.py:80
+msgid "Inviting"
+msgstr "Attirant"
+
+#: src/naming.py:81
+msgid "Bad"
+msgstr "Mauvais"
+
+#: src/naming.py:81
+msgid "Good"
+msgstr "Bon"
+
+#: src/naming.py:82
+msgid "Repelling"
+msgstr "Repoussant"
+
+#: src/naming.py:82
+msgid "Appealing"
+msgstr "Attrayant"
+
+#: src/naming.py:83
+msgid "Discouraging"
+msgstr "Décourageant"
+
+#: src/naming.py:83
+msgid "Motivating"
+msgstr "Motivant"
