@@ -41,9 +41,9 @@ from scipy import stats
 from math import sqrt
 from io import BytesIO
 import pandas as pd
-import gettext
 
-from naming import titles, order_long, order_short, pairs
+
+from naming import titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH
 
 
 def interval(data, alpha):
@@ -95,18 +95,18 @@ def cat2dict(data: DataFrame) -> Dict[str, List[str]]:
 	return {name: [col for col in data.columns if name in col] for name in titles.keys()}
 
 
-def plotMeanValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
+def plotMeanValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lang:str):
 	"""Returns the dataFrame with the mean values"""
 	cat = cat2dict(datas[next(iter(datas))])
 	data = DataFrame.from_dict({name: {name: dF[cat].mean().mean() for name, cat in cat.items()} for name, dF in datas.items()})
 	data = data.reindex(cat.keys())
-	data.plot(ax=ax, grid=True, marker='o', xlabel=_('Dimension'), ylabel=_('Average value'), ylim=[-3, 3])
+	data.plot(ax=ax, grid=True, marker='o', xlabel=i18n_dim[lang], ylabel=i18n_average[lang], ylim=[-3, 3])
 	plt.setp(ax.get_xticklabels(), y=0.5)
 	return data
 
 
 
-def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
+def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lang: str):
 	#
 	columns = datas[next(iter(datas))].columns
 	plt.plot([0, 0], [len(columns) + 0.5, 0.5], 'k')
@@ -116,8 +116,8 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 		val = data.mean().T
 		plt.plot(val, range(len(val), 0, -1), 's-')
 	# set axes, etc.
-	labelsL = [_(pairs[col][0]) for col in datas[next(iter(datas))].T.index] + [""]
-	labelsR = [_(pairs[col][1]) for col in datas[next(iter(datas))].T.index] + [""]
+	labelsL = [pairs[col][lang][0] for col in datas[next(iter(datas))].T.index] + [""]
+	labelsR = [pairs[col][lang][1] for col in datas[next(iter(datas))].T.index] + [""]
 	labelsL.reverse()
 	labelsR.reverse()
 	ax.set_yticks(range(len(labelsL)), labels=labelsL)
@@ -133,21 +133,18 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	return dd
 
 
-def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha):
+def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
 	plt.xlim([-3, 3])
 	plt.ylim([-3, 3])
 	ax.xaxis.set_ticks([-3, -1, 1, 3])
 	ax.yaxis.set_ticks([-3, -1, 1, 3])
 	plt.grid()
-	plt.text(-2, 2, _("too\nself-\noriented"), alpha=0.5, ha='center', va='center')
-	plt.text(0, 2, _("self-\noriented"), alpha=0.5, ha='center', va='center')
-	plt.text(2, 2, _("desired"), alpha=0.5, ha='center', va='center')
-	plt.text(0, 0, _("neutral"), alpha=0.5, ha='center', va='center')
-	plt.text(2, 0, _("taks-\noriented"), alpha=0.5, ha='center', va='center')
-	plt.text(-2, -2, _("superfluous"), alpha=0.5, ha='center', va='center')
-	plt.text(2, -2, _("too\ntask-\noriented"), alpha=0.5, ha='center', va='center')
-	plt.xlabel(_("Pragmatic Quality"))
-	plt.ylabel(_("Hedonic Quality"))
+	for i in [-2,0,2]:
+		for j in [-2, 0, 2]:
+			if (i,j) in QPQH:
+				plt.text(i, j, QPQH[i, j][lang], alpha=0.5, ha='center', va='center')
+	plt.xlabel(titles["QP"][lang])
+	plt.ylabel(titles["QH"][lang])
 
 	cat = cat2dict(datas[next(iter(datas))])
 	attr = {}

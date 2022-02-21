@@ -41,8 +41,7 @@ from locale import getdefaultlocale
 import matplotlib.pyplot as plt
 from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
 from naming import langOption
-import gettext
-_ = gettext.gettext
+
 
 
 def updateFileList():
@@ -79,28 +78,16 @@ def figure(fct, **kwargs):
 	return ret
 
 
-
 # create a temporary folder, to put the image files
 tmpFolder = TemporaryDirectory()
-
-
 
 # st.session_state.data stores all the data: {filename: DataFrame}
 if 'data' not in st.session_state:
 	st.session_state.data = {}
 
-# manage the languages at first launch
-if 'languages' not in st.session_state:
-	# load the different languages
-	st.session_state.languages = {lang: gettext.translation('base', localedir='../locales', languages=[lang]) for lang in langOption.keys()}
-	# determine the default lang according to the locale
-	langs = [lang for lang in langOption.keys() if lang in getdefaultlocale()[0].lower()]
-	lang = langs[0] if langs else 'en'
-	# install it
-	st.session_state.lang = lang
-	st.session_state.languages[lang].install()
-	_ = st.session_state.languages[lang].gettext
-
+# determine the default lang according to the locale
+langs = [lang for lang in langOption.keys() if lang in getdefaultlocale()[0].lower()]
+lang = langs[0] if langs else 'en'
 
 
 # ====== Page ======
@@ -137,10 +124,9 @@ with st.sidebar:
 	# plot options
 	with st.expander("Plot options"):
 		# language
-		st.selectbox("Language", langOption.keys(), format_func=lambda x: langOption.get(x),
-			help="Change the language used in the plots.", key='lang')
-		st.session_state.languages[st.session_state.lang].install()
-		_ = st.session_state.languages[st.session_state.lang].gettext
+		lang = st.selectbox("Language", langOption.keys(), format_func=lambda x: langOption.get(x),
+			index=list(langOption).index(lang),
+			help="Change the language used in the plots.")
 		# interval confidence
 		stdOption = {0: "No", 0.10: "Yes 10%", 0.33:"Yes 33%", 0.5:"Yes 50%", 0.68: "Yes at 68%", 0.95: "Yes at 95%", 0.997: "Yes at 99.7%"}
 		std = st.selectbox("Plot confidence interval ?", stdOption.keys(), format_func=lambda x: stdOption.get(x),
@@ -159,7 +145,7 @@ if st.session_state.data:
 	st.subheader("Average values")
 	col1, col2 = st.columns(2)
 	with col1:
-		mv = figure(plotMeanValues)
+		mv = figure(plotMeanValues, lang=lang)
 	with col2:
 		st.dataframe(mv)
 
@@ -167,7 +153,7 @@ if st.session_state.data:
 	st.subheader("Pair words plot")
 	#col1, col2 = st.columns(2)
 	#with col1:
-	pw = figure(plotWordPair)
+	pw = figure(plotWordPair, lang=lang)
 	#with col2:
 	st.dataframe(pw)
 
@@ -175,7 +161,7 @@ if st.session_state.data:
 	st.subheader("Attrakdiff")
 	col1, col2 = st.columns(2)
 	with col1:
-		attrakdiff = figure(plotAttrakdiff, alpha=std)
+		attrakdiff = figure(plotAttrakdiff, alpha=std, lang=lang)
 	with col2:
 		st.dataframe(attrakdiff)
 		st.metric("QH", 0.30)
