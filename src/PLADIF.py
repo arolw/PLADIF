@@ -55,7 +55,6 @@ def updateFileList():
 	if newfiles:
 		for f in newfiles:
 			try:
-				print("name=",splitext(f.name))
 				st.session_state.data[splitext(f.name)[0]] = loadCSV(f)
 			except ValueError as e:
 				msg.error(str(e))
@@ -157,25 +156,28 @@ st.markdown("<h1 style='text-align:center;'>" + "PLADIF: Plot Attrakdiff graphs 
 # plot the graphs and data tables
 if st.session_state.data:
 	# mean values QP, QHI, QHS, ATT
+	st.subheader("Average values")
 	col1, col2 = st.columns(2)
 	with col1:
 		mv = figure(plotMeanValues)
 	with col2:
-		st.dataframe(mv, width=150)
+		st.dataframe(mv)
 
 	# pair words plot
-	col1, col2 = st.columns(2)
-	with col1:
-		pw = figure(plotWordPair)
-	with col2:
-		st.table(pw)
+	st.subheader("Pair words plot")
+	#col1, col2 = st.columns(2)
+	#with col1:
+	pw = figure(plotWordPair)
+	#with col2:
+	st.dataframe(pw)
 
 	# attrakdiff
+	st.subheader("Attrakdiff")
 	col1, col2 = st.columns(2)
 	with col1:
 		attrakdiff = figure(plotAttrakdiff, alpha=std)
 	with col2:
-		st.dataframe(attrakdiff, width=150)
+		st.dataframe(attrakdiff)
 		st.metric("QH", 0.30)
 		st.metric("QP", 0.30)
 
