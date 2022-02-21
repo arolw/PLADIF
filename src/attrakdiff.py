@@ -59,7 +59,7 @@ def interval(data, alpha):
 
 
 
-def loadCSV(file: BytesIO):
+def loadCSV(file: [BytesIO, str]):
 	"""Load the data from an (already open) excel file
 	The data is normalize in [-3,3]
 	Return a dataframe"""
