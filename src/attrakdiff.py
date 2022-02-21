@@ -41,11 +41,11 @@ from scipy import stats
 from math import sqrt
 from io import BytesIO
 import pandas as pd
-
-
+import gettext
 
 from naming import titles, order_long, order_short, pairs
 
+_ = gettext.gettext
 
 
 def interval(data, alpha):
@@ -71,11 +71,11 @@ def loadCSV(file: BytesIO):
 	try:
 		url_index = Tab.columns.get_loc("URL")
 	except KeyError:
-		raise ValueError("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !")
+		raise ValueError(_("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !"))
 	Tab.drop(columns=Tab.columns[url_index:], inplace=True)
 	# check the size and rename the columns
 	if len(Tab.columns) not in [len(order_short), len(order_long)]:
-		raise ValueError("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)" % (len(order_short), len(order_long)))
+		raise ValueError(_("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)") % (len(order_short), len(order_long)))
 	Tab.columns = order_short if len(Tab.columns) == len(order_short) else order_long
 	# normalize data in [-3,3]
 	for col, serie in Tab.items():
@@ -103,7 +103,7 @@ def plotMeanValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]):
 	cat = cat2dict(datas[next(iter(datas))])
 	data = DataFrame.from_dict({name: {name: dF[cat].mean().mean() for name, cat in cat.items()} for name, dF in datas.items()})
 	data = data.reindex(cat.keys())
-	data.plot(ax=ax, grid=True, marker='o', xlabel='Dimension', ylabel='Valeur moyenne', ylim=[-3, 3])
+	data.plot(ax=ax, grid=True, marker='o', xlabel=_('Dimension'), ylabel=_('Valeur moyenne'), ylim=[-3, 3])
 	plt.setp(ax.get_xticklabels(), y=0.5)
 	return data
 
@@ -145,15 +145,15 @@ def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], a
 	ax.xaxis.set_ticks([-3, -1, 1, 3])
 	ax.yaxis.set_ticks([-3, -1, 1, 3])
 	plt.grid()
-	plt.text(-2, 2, 'trop\norienté\n vers le soi', alpha=0.5, ha='center', va='center')
-	plt.text(0, 2, 'orienté\n vers le soi', alpha=0.5, ha='center', va='center')
-	plt.text(2, 2, 'désiré', alpha=0.5, ha='center', va='center')
-	plt.text(0, 0, 'neutre', alpha=0.5, ha='center', va='center')
-	plt.text(2, 0, 'orienté\ntâche', alpha=0.5, ha='center', va='center')
-	plt.text(-2, -2, 'superflu', alpha=0.5, ha='center', va='center')
-	plt.text(2, -2, 'trop\norienté\ntâche', alpha=0.5, ha='center', va='center')
-	plt.xlabel("Qualité pragmatique")
-	plt.ylabel("qualité hédonique")
+	plt.text(-2, 2, _("too\nself-\noriented"), alpha=0.5, ha='center', va='center')
+	plt.text(0, 2, _("self-\noriented"), alpha=0.5, ha='center', va='center')
+	plt.text(2, 2, _("desired"), alpha=0.5, ha='center', va='center')
+	plt.text(0, 0, _("neutral"), alpha=0.5, ha='center', va='center')
+	plt.text(2, 0, _("taks-\noriented"), alpha=0.5, ha='center', va='center')
+	plt.text(-2, -2, _("superfluous"), alpha=0.5, ha='center', va='center')
+	plt.text(2, -2, _("too\ntask-\noriented"), alpha=0.5, ha='center', va='center')
+	plt.xlabel(_("Pragmatic Quality"))
+	plt.ylabel(_("Hedonic Quality"))
 
 	cat = cat2dict(datas[next(iter(datas))])
 	attr = {}

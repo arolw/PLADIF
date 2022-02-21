@@ -34,16 +34,17 @@ Date: Feb 2022
 
 from collections import OrderedDict
 
-#TODO: add english (and german) translation
+# language options
+langOption = OrderedDict(en="English", fr="Français", de="Deutsch")
 
-
-
+# categories title
 titles = {
-	"QP": "Qualité pragmatique",
-	"QHS": "Qualité hédonique - stimulation",
-	"QHI": "Qualité hédonique - identification",
-	"ATT": "Attrativité globale"
+	"QP": "Pragmatic Quality",
+	"QHS": "Hedonic Quality - Stimulation",
+	"QHI": "Hedonic Quality - Identify",
+	"ATT": "Attrativeness"
 }
+
 # pairs of word, ordered in the order we want them on the graph (QP, QHS, QHI and APP)
 pairs = OrderedDict(
 	QP1=("Technique", "Humain"),
@@ -79,6 +80,7 @@ pairs = OrderedDict(
 	ATT7=("Décourageant", "Motivant")
 )
 
+# short or long attrakdiff
 order_short = ["QP2*", 'ATT2', 'QP3*', 'QHI3*', 'QP5*', "QHI4", "QHS2", "ATT5*", "QP6", "QHS5"]
 order_long = [
 	"QP1*", "QHI1", "ATT1*", "QHS1*", "QP2*", "QHI2*", "ATT2", "QP3", "ATT3*, QP4",
