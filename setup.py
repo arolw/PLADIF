@@ -43,9 +43,10 @@ def readme():
 
 
 setup(name='pladif',
-      version='0.1',
+      version='0.11',
       description="PLADIF is a simple tool that plot attrakdiff graphs from CSV files (like those from Usabilla)",
       long_description=readme(),
+      long_description_content_type='text/markdown',
       classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
@@ -58,8 +59,9 @@ setup(name='pladif',
       author='Thibault Hilaire',
       author_email='thibault@docmatic.fr',
       license='MIT',
+      packages=['pladif'],
       install_requires=['matplotlib', 'pandas', 'streamlit', 'scipy'],
-      entry_points={'console_scripts': ['runPLADIF=src.PLADIF']},
+      entry_points={'console_scripts': ['runPLADIF=pladif.runPladif:runPladif']},
       include_package_data=True,
       zip_safe=False
 )
