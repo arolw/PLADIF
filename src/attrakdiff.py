@@ -36,14 +36,14 @@ Date: Feb 2022
 from typing import Dict, List, TypeVar
 from pandas import read_excel, DataFrame, read_csv
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Rectangle, FancyBboxPatch
 from scipy import stats
 from math import sqrt
 from io import BytesIO
 import pandas as pd
 
 
-from naming import titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH
+from naming import categories, titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH, plt_mean, plt_pair, plt_attr
 
 
 def interval(data, alpha):
@@ -92,30 +92,44 @@ def cat2dict(data: DataFrame) -> Dict[str, List[str]]:
 	"""Returns the dictionary of the categories used
 	Ex: {'QP': ['QP1','QP2'], 'ATT': ['ATT1']} """
 	# groups categories
-	return {name: [col for col in data.columns if name in col] for name in titles.keys()}
+	return {name: [col for col in data.columns if name in col] for name in categories}
 
 
-def plotMeanValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lang:str):
-	"""Returns the dataFrame with the mean values"""
+def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lang:str):
+	"""Plot the diagrame of average values
+	and returns the associated dataFrame"""
 	cat = cat2dict(datas[next(iter(datas))])
 	data = DataFrame.from_dict({name: {name: dF[cat].mean().mean() for name, cat in cat.items()} for name, dF in datas.items()})
 	data = data.reindex(cat.keys())
 	data.plot(ax=ax, grid=True, marker='o', xlabel=i18n_dim[lang], ylabel=i18n_average[lang], ylim=[-3, 3])
 	plt.setp(ax.get_xticklabels(), y=0.5)
+	plt.title(plt_mean[lang])
 	return data
 
 
 
 def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lang: str):
-	#
+	"""Draw the diagram of word-pairs
+	and return the associated dataframe"""
 	columns = datas[next(iter(datas))].columns
 	plt.plot([0, 0], [len(columns) + 0.5, 0.5], 'k')
 	# plot each line
 	dd = DataFrame.from_dict({name: {col: dF[col].mean().T for col in columns} for name, dF in datas.items()})
 	for name, data in datas.items():
 		val = data.mean().T
-		plt.plot(val, range(len(val), 0, -1), 's-')
-	# set axes, etc.
+		plt.plot(val, range(len(val), 0, -1), 's-', label=name)
+	plt.legend()
+	# add rectangle for each category
+	y = 1
+	xpos = {'en': -5.3, 'fr':-5.8, 'de': -4}        #TODO: computes it automatically (get minimum position of all labels)
+	length = {'en': 11, 'fr': 11.3, 'de': 8}
+	for cat, color in zip(categories, ['skyblue', 'orchid', 'pink', 'palegreen']):
+		size = len([x for x in columns if cat in x])
+		ax.add_patch(FancyBboxPatch((xpos[lang], y), length[lang], size-1, fill=True, alpha=0.2, clip_on=False, color=color))
+		plt.text(xpos[lang]-0.2, y+size/2-0.5, cat, clip_on=False, rotation='vertical', verticalalignment='center')
+		y += size
+
+	# set axes, and pair words as left/right labels
 	labelsL = [pairs[col][lang][0] for col in datas[next(iter(datas))].T.index] + [""]
 	labelsR = [pairs[col][lang][1] for col in datas[next(iter(datas))].T.index] + [""]
 	labelsL.reverse()
@@ -129,49 +143,51 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lan
 
 	ax.grid(visible=True)
 	ax.set_box_aspect(1.25)
+	plt.title(plt_pair[lang])
 
 	return dd
 
 
 def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
+	"""Plot the Attrakdiff portfolio
+	and return the associated dataframe"""
 	plt.xlim([-3, 3])
 	plt.ylim([-3, 3])
 	ax.xaxis.set_ticks([-3, -1, 1, 3])
 	ax.yaxis.set_ticks([-3, -1, 1, 3])
 	plt.grid()
-	for i in [-2,0,2]:
+	for i in [-2, 0, 2]:
 		for j in [-2, 0, 2]:
-			if (i,j) in QPQH:
-				plt.text(i, j, QPQH[i, j][lang], alpha=0.5, ha='center', va='center')
+			if (i, j) in QPQH:
+				plt.text(i, j, QPQH[i, j][lang], alpha=0.5, ha='center', va='center', zorder=-5)
 	plt.xlabel(titles["QP"][lang])
 	plt.ylabel(titles["QH"][lang])
 
 	cat = cat2dict(datas[next(iter(datas))])
 	attr = {}
 	for name, data in datas.items():
+		# get QH and QP
 		QH = data[cat["QHI"]+cat["QHS"]]
 		QP = data[cat["QP"]]
-
-		pd.options.display.max_rows = 999
-		print("QP=", QP.stack())
-		print("QH=", QH.stack())
-
 		x, ix = interval(QP.stack(), alpha)
 		y, iy = interval(QH.stack(), alpha)
-
-		print("x=", x, "  ix=", ix)
-		print("y=", x, "  iy=", iy)
-		plt.plot(x, y, 'o')
+		# plot point
+		p = plt.plot(x, y, 'o', label=name)
+		# plot interval
 		if alpha:
-			ax.add_patch(Rectangle((ix[0], iy[0]), ix[1]-ix[0], iy[1]-iy[0], fill=True, alpha=0.2))
+			ax.add_patch(Rectangle((ix[0], iy[0]), ix[1]-ix[0], iy[1]-iy[0], fill=True, alpha=0.2, color=p[0].get_color()))
+
 		attr[name] = {"QP": x, "QH": y}
 
+	plt.legend()
+	plt.title(plt_attr[lang])
+	#pd.options.display.max_rows = 999
 	return pd.DataFrame.from_dict(attr)
 
 # plt.style.use('default')
 #
 # T = loadData({"mars 21": "exp1.xlsx", "sept 21": "exp2.xlsx"})
-# plotMeanValues(T)
+# plotAverageValues(T)
 # plotWordPair(T)
 # plotAttrakdiff(T)
 

@@ -39,7 +39,7 @@ from tempfile import TemporaryDirectory
 from os.path import join, splitext
 from locale import getdefaultlocale
 import matplotlib.pyplot as plt
-from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotMeanValues
+from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotAverageValues
 from naming import langOption
 
 
@@ -128,7 +128,7 @@ with st.sidebar:
 			index=list(langOption).index(lang),
 			help="Change the language used in the plots.")
 		# interval confidence
-		stdOption = {0: "No", 0.10: "Yes 10%", 0.33:"Yes 33%", 0.5:"Yes 50%", 0.68: "Yes at 68%", 0.95: "Yes at 95%", 0.997: "Yes at 99.7%"}
+		stdOption = {0: "No", 0.68: "Yes at 68%", 0.95: "Yes at 95%", 0.997: "Yes at 99.7%"}
 		std = st.selectbox("Plot confidence interval ?", stdOption.keys(), format_func=lambda x: stdOption.get(x),
 			help="Display in the graph the confidence interval (at 67%, 90% or 95%) or not.", index=1, disabled=False)
 
@@ -143,29 +143,28 @@ st.markdown("<h1 style='text-align:center;'>" + "PLADIF: Plot Attrakdiff graphs 
 if st.session_state.data:
 	# mean values QP, QHI, QHS, ATT
 	st.subheader("Average values")
-	col1, col2 = st.columns(2)
+	col1, col2 = st.columns((3, 1))
 	with col1:
-		mv = figure(plotMeanValues, lang=lang)
+		mv = figure(plotAverageValues, lang=lang)
 	with col2:
 		st.dataframe(mv)
 
 	# pair words plot
 	st.subheader("Pair words plot")
-	#col1, col2 = st.columns(2)
-	#with col1:
-	pw = figure(plotWordPair, lang=lang)
-	#with col2:
-	st.dataframe(pw)
+	col1, col2 = st.columns((3, 1))
+	with col1:
+		pw = figure(plotWordPair, lang=lang)
+	with col2:
+		st.table(pw)
 
 	# attrakdiff
 	st.subheader("Attrakdiff")
-	col1, col2 = st.columns(2)
+	col1, col2 = st.columns((3, 1))
 	with col1:
 		attrakdiff = figure(plotAttrakdiff, alpha=std, lang=lang)
 	with col2:
 		st.dataframe(attrakdiff)
-		st.metric("QH", 0.30)
-		st.metric("QP", 0.30)
+
 
 
 # footer

@@ -51,8 +51,12 @@ order_long = [
 # few words tranlated
 i18n_average = {'en': "Average value", 'fr': "Valeur moyenne", 'de': ""}
 i18n_dim = {'en': "Dimension", 'fr': "Dimension", 'de': ""}
+plt_mean = {'en': "Diagram of average values", 'fr': "Graphique des valeurs moyennes", 'de': ""}
+plt_pair = {'en': "Description of Word-pairs", 'fr': "Graphique des paires de mots", 'de': ""}
+plt_attr = {'en': "Portfolio-presentation", 'fr': "Portfolio des résultats", 'de': ""}
 
 # categories title
+categories = ["QP", "QHS", "QHI", "ATT"]
 titles = {
 	"QP": {'en': "Pragmatic Quality", 'fr': "Qualité Pragmatique", 'de': ""},
 	"QHS": {'en': "Hedonic Quality - Stimulation", 'fr': "Qualité hédonique - stimulation", 'de': ""},
