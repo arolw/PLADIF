@@ -41,7 +41,7 @@ from os.path import join, splitext
 from locale import getdefaultlocale
 import matplotlib.pyplot as plt
 from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotAverageValues
-from naming import langOption
+from naming import langOption, plt_pair, plt_attr, plt_avrg
 
 
 # create a temporary folder, to put the image files
@@ -145,7 +145,7 @@ def main():
 	# plot the graphs and data tables
 	if st.session_state.data:
 		# mean values QP, QHI, QHS, ATT
-		st.subheader("Average values")
+		st.subheader(plt_avrg[lang])
 		col1, col2 = st.columns((3, 1))
 		with col1:
 			mv = figure(plotAverageValues, lang=lang)
@@ -153,7 +153,7 @@ def main():
 			st.dataframe(mv)
 
 		# pair words plot
-		st.subheader("Pair words plot")
+		st.subheader(plt_pair[lang])
 		col1, col2 = st.columns((3, 1))
 		with col1:
 			pw = figure(plotWordPair, lang=lang)
@@ -161,7 +161,7 @@ def main():
 			st.table(pw)
 
 		# attrakdiff
-		st.subheader("Attrakdiff")
+		st.subheader(plt_attr[lang])
 		col1, col2 = st.columns((3, 1))
 		with col1:
 			attrakdiff = figure(plotAttrakdiff, alpha=std, lang=lang)
@@ -180,38 +180,8 @@ def main():
 	is a small open source tool to draw attrakdiff plots from CSV files. &nbsp;&nbsp;&nbsp; ©️ T. Hilaire, 2022.</p>
 	</div>
 	"""
-	toto="""<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a>
-	is a small open source tool to draw attrakdiff plots from CSV files. &nbsp;&nbsp;&nbsp; ©️ T. Hilaire, 2022.</p>"""
-	st.markdown(footer, unsafe_allow_html=True)
+	#st.markdown(footer, unsafe_allow_html=True)
 
-	footer = """<style>
-	a:link , a:visited{
-	color: blue;
-	background-color: transparent;
-	text-decoration: underline;
-	}
-
-	a:hover,  a:active {
-	color: red;
-	background-color: transparent;
-	text-decoration: underline;
-	}
-
-	.footer {
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	background-color: white;
-	color: black;
-	text-align: center;
-	}
-	</style>
-	<div class="footer">
-	<p>Developed with ❤ by <a style='display: block; text-align: center;' href="https://www.heflin.dev/" target="_blank">Heflin Stephen Raj S</a></p>
-	</div>
-	"""
-	st.markdown(footer, unsafe_allow_html=True)
 
 if __name__ == '__main__':
 	if st._is_running_with_streamlit:

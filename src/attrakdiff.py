@@ -43,7 +43,7 @@ from io import BytesIO
 import pandas as pd
 
 
-from naming import categories, titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH, plt_mean, plt_pair, plt_attr
+from naming import categories, titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH, plt_avrg, plt_pair, plt_attr
 
 
 def interval(data, alpha):
@@ -103,7 +103,7 @@ def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]
 	data = data.reindex(cat.keys())
 	data.plot(ax=ax, grid=True, marker='o', xlabel=i18n_dim[lang], ylabel=i18n_average[lang], ylim=[-3, 3])
 	plt.setp(ax.get_xticklabels(), y=0.5)
-	plt.title(plt_mean[lang])
+	plt.title(plt_avrg[lang])
 	return data
 
 
