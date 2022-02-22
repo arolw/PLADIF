@@ -58,7 +58,7 @@ setup(name='PLADIF',
       author='Thibault Hilaire',
       author_email='thibault@docmatic.fr',
       license='MIT',
-      install_requires=['matplotlib', 'pandas', 'streamlit'],
+      install_requires=['matplotlib', 'pandas', 'streamlit', 'scipy'],
       entry_points={'console_scripts': ['runPLADIF=src.PLADIF']},
       include_package_data=True,
       zip_safe=False
