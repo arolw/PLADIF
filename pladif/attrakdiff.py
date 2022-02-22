@@ -43,7 +43,7 @@ from io import BytesIO
 import pandas as pd
 
 
-from naming import categories, titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH, plt_avrg, plt_pair, plt_attr
+from pladif.naming import categories, titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH, plt_avrg, plt_pair, plt_attr
 
 
 def interval(data, alpha):

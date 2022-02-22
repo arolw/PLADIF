@@ -40,8 +40,8 @@ from tempfile import TemporaryDirectory
 from os.path import join, splitext
 from locale import getdefaultlocale
 import matplotlib.pyplot as plt
-from attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotAverageValues
-from naming import langOption, plt_pair, plt_attr, plt_avrg
+from pladif.attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotAverageValues
+from pladif.naming import langOption, plt_pair, plt_attr, plt_avrg
 
 
 # create a temporary folder, to put the image files
