@@ -78,4 +78,4 @@ You can download each image (with the download button below each image).
 ## I hope it will be useful
 If PLADIF is useful, buy me a beer 🍺 !
 
-Disclaimer: I am not affiliate to Usabilla nor Attrakdiff. This is a simple python tool for that. It uses (matplotlib)[https://matplotlib.org/] for the graphs and (pandas)[https://pandas.pydata.org/] for manipulatin the data (I am not a pandas expert, and probably some code that be done more efficiently with the adequate pandas methods). (Streamlit)[https://streamlit.io/] is used for the web app.
+Disclaimer: I am not affiliate to Usabilla nor Attrakdiff. This is a simple python tool for that. It uses [matplotlib](https://matplotlib.org/) for the graphs and [pandas](https://pandas.pydata.org/) for manipulatin the data (I am not a pandas expert, and probably some code that be done more efficiently with the adequate pandas methods). [Streamlit](https://streamlit.io/) is used for the web app. It is maybe not the *best* choice for PLADIF, but I wanted to try it!
