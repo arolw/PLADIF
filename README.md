@@ -6,6 +6,8 @@
 
 **PLADIF** is a simple tool that plots attrakdiff plots from CSV file (like those prroduced by Usabilla). It is based on Python, matplotlib, pandas and streamlit. It's a web-app that can be installed locally or hosted in a web server.
 
+**A live demo can be found [here](https://share.streamlit.io/thilaire/pladif/main/pladif/PLADIF.py)**
+
 The web-app takes Usabilla's CSV files as input, and produces attrakdiff graphes as output.
 ![screenshot](doc/screenshot.png)
 
@@ -16,6 +18,7 @@ It produces the three diagrams of the Attrakdiff method:
 ![Description of word-pairs](doc/plotWordPair.jpg)
 #### The portfolio presentation
 ![Portfolio presentation](doc/plotAttrakdiff.jpg)
+
 
 
 ## Installation
