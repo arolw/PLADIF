@@ -148,7 +148,7 @@ if st.session_state.data:
 	st.subheader(plt_avrg[lang])
 	col1, col2 = st.columns((3, 1))
 	with col1:
-		mv = figure(plotAverageValues, lang=lang)
+		mv = figure(plotAverageValues, alpha=std, lang=lang)
 	with col2:
 		st.dataframe(mv)
 

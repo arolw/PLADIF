@@ -53,7 +53,8 @@ def interval(data, alpha):
 	"""
 	mean = data.mean()
 	#return mean, (mean-data.std()/sqrt(2), mean+data.std()/sqrt(2))
-	return mean, stats.t.interval(alpha, len(data)-1, loc=mean, scale=stats.sem(data))
+	interval = stats.t.interval(alpha, len(data) - 1, loc=mean, scale=stats.sem(data))
+	return mean, interval[0], interval[1]
 	#return mean, (mean-1.895*stats.sem(data)/sqrt(len(data)-1), mean+1.895*stats.sem(data)/sqrt(len(data)-1))
 
 
@@ -95,14 +96,24 @@ def cat2dict(data: DataFrame) -> Dict[str, List[str]]:
 	return {name: [col for col in data.columns if name in col] for name in categories}
 
 
-def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lang:str):
+def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha:float, lang:str):
 	"""Plot the diagrame of average values
 	and returns the associated dataFrame"""
 	cat = cat2dict(datas[next(iter(datas))])
-	data = DataFrame.from_dict({name: {name: dF[cat].mean().mean() for name, cat in cat.items()} for name, dF in datas.items()})
+	data = DataFrame.from_dict({name: {name: list(interval(dF[cat].stack(), alpha)) for name, cat in cat.items()} for name, dF in datas.items()})
 	data = data.reindex(cat.keys())
-	data.plot(ax=ax, grid=True, marker='o', xlabel=i18n_dim[lang], ylabel=i18n_average[lang], ylim=[-3, 3])
+	#data.plot(ax=ax, grid=True, marker='o', xlabel=i18n_dim[lang], ylabel=i18n_average[lang], ylim=[-3, 3])
+
+	for name, d in data.items():
+		T = DataFrame.from_dict({c: v for c, v in d.items()})
+		plt.plot(T.loc[0], marker='o')
+		plt.fill_between(range(len(T.columns)), T.loc[1], T.loc[2], alpha=0.1)
+
+	plt.xlabel(i18n_dim[lang])
+	plt.ylabel(i18n_average[lang])
+	plt.ylim(-3,3)
 	plt.setp(ax.get_xticklabels(), y=0.5)
+	plt.grid()
 	plt.title(plt_avrg[lang])
 	return data
 
@@ -169,13 +180,13 @@ def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], a
 		# get QH and QP
 		QH = data[cat["QHI"]+cat["QHS"]]
 		QP = data[cat["QP"]]
-		x, ix = interval(QP.stack(), alpha)
-		y, iy = interval(QH.stack(), alpha)
+		x, ixm, ixp = interval(QP.stack(), alpha)
+		y, iym, iyp = interval(QH.stack(), alpha)
 		# plot point
 		p = plt.plot(x, y, 'o', label=name)
 		# plot interval
 		if alpha:
-			ax.add_patch(Rectangle((ix[0], iy[0]), ix[1]-ix[0], iy[1]-iy[0], fill=True, alpha=0.2, color=p[0].get_color()))
+			ax.add_patch(Rectangle((ixm, iym), ixp-ixm, iyp-iym, fill=True, alpha=0.2, color=p[0].get_color()))
 
 		attr[name] = {"QP": x, "QH": y}
 
@@ -192,9 +203,9 @@ def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], a
 # plotAttrakdiff(T)
 
 if __name__ == '__main__':
-	X = loadCSV("../test/test.csv")
+	X = loadCSV("../resources/exp2.csv")
 	#fig, ax = plt.subplots()
 	#plotWordPair({'toto': X})
 	fig, ax = plt.subplots()
-	plotWordPair(fig, ax, {'toto': X})
+	plotAverageValues(fig, ax, {'toto': X}, 'en')
 	plt.show()
