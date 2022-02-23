@@ -63,13 +63,16 @@ Don't forget to close PLADIF (the server) with Ctrl+C when you don't use it (clo
 
 ## Use it
 It's quite simple. Just drag'n drop your CSV files (from Usabilla) on the left panel, and that's it.
-You can change the lang (English or French for the moment, Deutsch should arrive soon), or adjust the interval confidence level
+You can change the lang (English or French for the moment, Deutsch should arrive soon), or adjust the interval confidence level.
+You can download each image (with the download button below each image).
 
 ## TODO
 - add Deutsch support
 - support other CSV file (for the moment, only Usabilla's one are supported, ie CSV with UTF-16 encoding and tab as delimiter)
 - add interval confidences on every graphs
 - integrate all the feedback you may send (just open an issue on GitHub)
+- add a CSV (or excel) report, with all the data
+- add a pdf report
 
 
 ## I hope it will be useful
