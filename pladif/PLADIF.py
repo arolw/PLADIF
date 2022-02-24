@@ -156,7 +156,7 @@ if st.session_state.data:
 	st.subheader(plt_pair[lang])
 	col1, col2 = st.columns((3, 1))
 	with col1:
-		pw = figure(plotWordPair, lang=lang)
+		pw = figure(plotWordPair, alpha=std, lang=lang)
 	with col2:
 		st.table(pw)
 

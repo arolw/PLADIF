@@ -119,16 +119,17 @@ def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]
 
 
 
-def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], lang: str):
+def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha:float, lang: str):
 	"""Draw the diagram of word-pairs
 	and return the associated dataframe"""
 	columns = datas[next(iter(datas))].columns
 	plt.plot([0, 0], [len(columns) + 0.5, 0.5], 'k')
 	# plot each line
-	dd = DataFrame.from_dict({name: {col: dF[col].mean().T for col in columns} for name, dF in datas.items()})
-	for name, data in datas.items():
-		val = data.mean().T
-		plt.plot(val, range(len(val), 0, -1), 's-', label=name)
+	dd = DataFrame.from_dict({name: {col: interval(dF[col], alpha) for col in columns} for name, dF in datas.items()})
+	for name, data in dd.items():
+		T = DataFrame.from_dict({c: v for c, v in data.items()})
+		plt.plot(T.loc[0], range(len(T.columns), 0, -1), 's-', label=name)
+		plt.fill_betweenx(range(len(T.columns), 0, -1), T.loc[1], T.loc[2], alpha=0.1)
 	plt.legend()
 	# add rectangle for each category
 	y = 1
@@ -207,5 +208,5 @@ if __name__ == '__main__':
 	#fig, ax = plt.subplots()
 	#plotWordPair({'toto': X})
 	fig, ax = plt.subplots()
-	plotAverageValues(fig, ax, {'toto': X}, 'en')
+	plotWordPair(fig, ax, {'toto': X}, 0.95, 'en')
 	plt.show()
