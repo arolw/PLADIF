@@ -72,7 +72,6 @@ You can download each image (with the download button below each image).
 ## TODO
 - add Deutsch support
 - support other CSV file (for the moment, only Usabilla's one are supported, ie CSV with UTF-16 encoding and tab as delimiter)
-- add interval confidences on every graphs
 - integrate all the feedback you may send (just open an issue on GitHub)
 - add a CSV (or excel) report, with all the data
 - add a pdf report

@@ -115,7 +115,7 @@ def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]
 	plt.setp(ax.get_xticklabels(), y=0.5)
 	plt.grid()
 	plt.title(plt_avrg[lang])
-	return data
+	return data.applymap(lambda x: "%.2f: [%.2f;%.2f]" % tuple(x)) if alpha else data.applymap(lambda x: x[0])
 
 
 
@@ -157,7 +157,8 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alp
 	ax.set_box_aspect(1.25)
 	plt.title(plt_pair[lang])
 
-	return dd
+	return dd.applymap(lambda x: "%.2f: [%.2f;%.2f]" % tuple(x)) if alpha else dd.applymap(lambda x: x[0])
+
 
 
 def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
@@ -189,7 +190,10 @@ def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], a
 		if alpha:
 			ax.add_patch(Rectangle((ixm, iym), ixp-ixm, iyp-iym, fill=True, alpha=0.2, color=p[0].get_color()))
 
-		attr[name] = {"QP": x, "QH": y}
+		if alpha:
+			attr[name] = {"QP": "%.2f: [%.2f;%.2f]" % (x, ixm, ixp), "QH": "%.2f: [%.2f;%.2f]" % (y, iym, iyp)}
+		else:
+			attr[name] = {"QP": x, "QH": y}
 
 	plt.legend()
 	plt.title(plt_attr[lang])
@@ -208,5 +212,5 @@ if __name__ == '__main__':
 	#fig, ax = plt.subplots()
 	#plotWordPair({'toto': X})
 	fig, ax = plt.subplots()
-	plotWordPair(fig, ax, {'toto': X}, 0.95, 'en')
+	plotAverageValues(fig, ax, {'toto': X}, 0.95, 'en')
 	plt.show()
