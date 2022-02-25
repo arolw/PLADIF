@@ -65,17 +65,19 @@ def updateFileList():
 			del st.session_state.data[name]
 
 
-def figure(fct, **kwargs):
+def figure(fct, format, **kwargs):
 	"""Plot a figure (by calling `fct` with the data)
 	and add a `Download image` button"""
+	# call the function to draw the plot
 	fig, ax = plt.subplots()
 	ret = fct(fig, ax, st.session_state.data, **kwargs)
 	st.pyplot(fig)
-	imgFilename = join(tmpFolder.name, fct.__name__+".jpg")
-	with open(imgFilename, 'w') as temp:
-		plt.savefig(temp, format='jpg', dpi=2*fig.dpi)
+	# save it to the file
+	imgFilename = join(tmpFolder.name, fct.__name__+"."+format)
+	plt.savefig(imgFilename, format=format, dpi=400)
+	# give it to the download image button
 	with open(imgFilename, 'rb') as temp:
-		st.download_button(label="Download jpeg", data=temp, file_name=fct.__name__+".jpg", mime="image/jpeg")
+		st.download_button(label="Download image", data=temp, file_name=fct.__name__+"."+format, mime="image")
 	return ret
 
 
@@ -134,7 +136,15 @@ with st.sidebar:
 		stdOption = {0: "No", 0.68: "Yes at 68%", 0.95: "Yes at 95%", 0.997: "Yes at 99.7%"}
 		std = st.selectbox("Plot confidence interval ?", stdOption.keys(), format_func=lambda x: stdOption.get(x),
 			help="Display in the graph the confidence interval (at 67%, 90% or 95%) or not.", index=1, disabled=False)
+		# save option
+		backendTypes = plt.gcf().canvas.get_supported_filetypes()
+		imageFormatList = list(set(backendTypes.keys()) & {'jpg', 'pdf', 'tif', 'svg', 'png'})
 
+		helpTypes = ", ".join(['%s (%s)' % ty for ty in backendTypes.items() if ty[0] in imageFormatList])
+		imageFormat = st.selectbox("Image format", imageFormatList,
+			help="Chosse the file format used to download the image. The possible formats are:\n" + helpTypes,
+			index=imageFormatList.index('jpg')
+		)
 
 
 
@@ -148,7 +158,7 @@ if st.session_state.data:
 	st.subheader(plt_avrg[lang])
 	col1, col2 = st.columns((3, 1))
 	with col1:
-		mv = figure(plotAverageValues, alpha=std, lang=lang)
+		mv = figure(plotAverageValues, imageFormat, alpha=std, lang=lang)
 	with col2:
 		st.dataframe(mv)
 
@@ -156,7 +166,7 @@ if st.session_state.data:
 	st.subheader(plt_pair[lang])
 	col1, col2 = st.columns((3, 1))
 	with col1:
-		pw = figure(plotWordPair, alpha=std, lang=lang)
+		pw = figure(plotWordPair, imageFormat, alpha=std, lang=lang)
 	with col2:
 		st.table(pw)
 
@@ -164,7 +174,7 @@ if st.session_state.data:
 	st.subheader(plt_attr[lang])
 	col1, col2 = st.columns((3, 1))
 	with col1:
-		attrakdiff = figure(plotAttrakdiff, alpha=std, lang=lang)
+		attrakdiff = figure(plotAttrakdiff, imageFormat, alpha=std, lang=lang)
 	with col2:
 		st.dataframe(attrakdiff)
 
