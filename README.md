@@ -67,7 +67,7 @@ Don't forget to close PLADIF (the server) with Ctrl+C when you don't use it (clo
 ## Use it
 It's quite simple. Just drag'n drop your CSV files (from Usabilla) on the left panel, and that's it.
 You can change the lang (English or French for the moment, Deutsch should arrive soon), or adjust the interval confidence level.
-You can download each image (with the download button below each image).
+You can download each image (with the download button below each image; you can choose the file format in the plot options).
 
 ## TODO
 - add Deutsch support
@@ -75,6 +75,13 @@ You can download each image (with the download button below each image).
 - integrate all the feedback you may send (just open an issue on GitHub)
 - add a CSV (or excel) report, with all the data
 - add a pdf report
+- add a "quit PLADIF" button ?
+
+
+## Versions
+- v0.4: add various image formats for the download (jpeg, tiff, pdf, svg or png)
+- v0.3: display confidence intervals in the tables
+- v0.2: plot confidence intervals (based on [Student's *t*-distribution](https://en.wikipedia.org/wiki/Student%27s_t-distribution), that is probably different that the one used by [Attrakdiff](http://www.attrakdif.de), but I don't know there is no documentation about it there)
 
 
 ## I hope it will be useful
