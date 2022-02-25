@@ -48,7 +48,7 @@ order_long = [
 	'QP6', "ATT6", "QHS3*", "QHS4*", "QHS5", "QHS6", "ATT7*", "QHS7*", "QP7"
 ]
 
-# few words tranlated
+# few words translated
 i18n_average = {'en': "Average value", 'fr': "Valeur moyenne", 'de': ""}
 i18n_dim = {'en': "Dimension", 'fr': "Dimension", 'de': ""}
 plt_avrg = {'en': "Diagram of average values", 'fr': "Graphique des valeurs moyennes", 'de': ""}

@@ -59,25 +59,28 @@ def updateFileList():
 			except ValueError as e:
 				msg.error(str(e))
 	# check the file(s) that are not anymore in the dict, and del them
-	delfilenames = [name for name in st.session_state.data.keys() if name not in [splitext(f.name)[0] for f in st.session_state.csvFile]]
+	delfilenames = [
+		name for name in st.session_state.data.keys() if name not in
+		[splitext(f.name)[0] for f in st.session_state.csvFile]
+	]
 	if delfilenames:
 		for name in delfilenames:
 			del st.session_state.data[name]
 
 
-def figure(fct, format, **kwargs):
+def figure(fct, imgFormat, **kwargs):
 	"""Plot a figure (by calling `fct` with the data)
 	and add a `Download image` button"""
 	# call the function to draw the plot
 	fig, ax = plt.subplots()
-	ret = fct(fig, ax, st.session_state.data, **kwargs)
+	ret = fct(ax, st.session_state.data, **kwargs)
 	st.pyplot(fig)
 	# save it to the file
-	imgFilename = join(tmpFolder.name, fct.__name__+"."+format)
-	plt.savefig(imgFilename, format=format, dpi=400)
+	imgFilename = join(tmpFolder.name, fct.__name__ + "." + imgFormat)
+	plt.savefig(imgFilename, format=imgFormat, dpi=400)
 	# give it to the download image button
 	with open(imgFilename, 'rb') as temp:
-		st.download_button(label="Download image", data=temp, file_name=fct.__name__+"."+format, mime="image")
+		st.download_button(label="Download image", data=temp, file_name=fct.__name__ + "." + imgFormat, mime="image")
 	return ret
 
 
@@ -108,8 +111,8 @@ with st.sidebar:
 
 	# file uploader
 	files = st.file_uploader("", type=['csv'], accept_multiple_files=True,
-		help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).",
-		on_change=updateFileList, key='csvFile'
+	    help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).",
+	    on_change=updateFileList, key='csvFile'
 	)
 
 	# error message array
@@ -121,8 +124,10 @@ with st.sidebar:
 
 	# CSV options
 	with st.expander("CSV options"):
-		CSVtype = {True: "Usabilla CSV file (UTF16, tab as delimiter)",
-			False: "CSV file (UTF8 and coma as delimiter)"}
+		CSVtype = {
+			True: "Usabilla CSV file (UTF16, tab as delimiter)",
+			False: "CSV file (UTF8 and coma as delimiter)"
+		}
 		CSV = st.selectbox("Choose a CSV type", CSVtype.keys(), format_func=lambda x: CSVtype.get(x), index=0,
 			help="Choose the type of CSV file.", disabled=True)
 
@@ -149,7 +154,7 @@ with st.sidebar:
 
 
 # title
-st.markdown("<h1 style='text-align:center;'>" + "PLADIF: Plot Attrakdiff graphs from CSV files" + "<h1/>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center;'>PLADIF: Plot Attrakdiff graphs from CSV files<h1/>", unsafe_allow_html=True)
 
 
 # plot the graphs and data tables

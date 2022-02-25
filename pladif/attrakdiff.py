@@ -33,17 +33,17 @@ Date: Feb 2022
 """
 
 
-from typing import Dict, List, TypeVar
-from pandas import read_excel, DataFrame, read_csv
+from typing import Dict, List
+from pandas import DataFrame, read_csv
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyBboxPatch
 from scipy import stats
-from math import sqrt
 from io import BytesIO
 import pandas as pd
 
 
-from pladif.naming import categories, titles, order_long, order_short, pairs, i18n_dim, i18n_average, QPQH, plt_avrg, plt_pair, plt_attr
+from pladif.naming import categories, titles, order_long, order_short, pairs
+from pladif.naming import i18n_dim, i18n_average, QPQH, plt_avrg, plt_pair, plt_attr
 
 
 def interval(data, alpha):
@@ -54,9 +54,8 @@ def interval(data, alpha):
 	# We use Student's t-distribution to compute the confidence interval
 	# see https://en.wikipedia.org/wiki/Student%27s_t-distribution
 	mean = data.mean()
-	#return mean, (mean-data.std()/sqrt(2), mean+data.std()/sqrt(2))
-	interval = stats.t.interval(alpha, len(data) - 1, loc=mean, scale=stats.sem(data))
-	return mean, interval[0], interval[1]
+	inter = stats.t.interval(alpha, len(data) - 1, loc=mean, scale=stats.sem(data))
+	return mean, inter[0], inter[1]
 
 
 
@@ -67,7 +66,7 @@ def loadCSV(file: [BytesIO, str]):
 	The data is normalize in [-3,3]
 	Return a dataframe"""
 	# read the excel file into a dataframe
-	Tab = read_csv(file, index_col=0, encoding="UTF-16", delimiter='\t') # encoding=None, encoding_errors="replace"
+	Tab = read_csv(file, index_col=0, encoding="UTF-16", delimiter='\t')    # encoding=None, encoding_errors="replace"
 	# drop all the columns after the URL column
 	try:
 		url_index = Tab.columns.get_loc("URL")
@@ -76,7 +75,8 @@ def loadCSV(file: [BytesIO, str]):
 	Tab.drop(columns=Tab.columns[url_index:], inplace=True)
 	# check the size and rename the columns
 	if len(Tab.columns) not in [len(order_short), len(order_long)]:
-		raise ValueError("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)" % (len(order_short), len(order_long)))
+		raise ValueError("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)"
+		                 % (len(order_short), len(order_long)))
 	Tab.columns = order_short if len(Tab.columns) == len(order_short) else order_long
 	# normalize data in [-3,3]
 	for col, serie in Tab.items():
@@ -98,13 +98,14 @@ def cat2dict(data: DataFrame) -> Dict[str, List[str]]:
 	return {name: [col for col in data.columns if name in col] for name in categories}
 
 
-def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha:float, lang:str):
+def plotAverageValues(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
 	"""Plot the diagrame of average values
 	and returns the associated dataFrame"""
 	cat = cat2dict(datas[next(iter(datas))])
-	data = DataFrame.from_dict({name: {name: list(interval(dF[cat].stack(), alpha)) for name, cat in cat.items()} for name, dF in datas.items()})
+	data = DataFrame.from_dict(
+		{name: {name: list(interval(dF[cat].stack(), alpha)) for name, cat in cat.items()} for name, dF in datas.items()}
+	)
 	data = data.reindex(cat.keys())
-	#data.plot(ax=ax, grid=True, marker='o', xlabel=i18n_dim[lang], ylabel=i18n_average[lang], ylim=[-3, 3])
 
 	for name, d in data.items():
 		T = DataFrame.from_dict({c: v for c, v in d.items()})
@@ -113,7 +114,7 @@ def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]
 
 	plt.xlabel(i18n_dim[lang])
 	plt.ylabel(i18n_average[lang])
-	plt.ylim(-3,3)
+	plt.ylim(-3, 3)
 	plt.setp(ax.get_xticklabels(), y=0.5)
 	plt.grid()
 	plt.title(plt_avrg[lang])
@@ -121,7 +122,7 @@ def plotAverageValues(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame]
 
 
 
-def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha:float, lang: str):
+def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
 	"""Draw the diagram of word-pairs
 	and return the associated dataframe"""
 	columns = datas[next(iter(datas))].columns
@@ -135,7 +136,7 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alp
 	plt.legend()
 	# add rectangle for each category
 	y = 1
-	xpos = {'en': -5.3, 'fr':-5.8, 'de': -4}        #TODO: computes it automatically (get minimum position of all labels)
+	xpos = {'en': -5.3, 'fr': -5.8, 'de': -4}        # TODO: computes it automatically (get minimum position of all labels)
 	length = {'en': 11, 'fr': 11.3, 'de': 8}
 	for cat, color in zip(categories, ['skyblue', 'orchid', 'pink', 'palegreen']):
 		size = len([x for x in columns if cat in x])
@@ -163,7 +164,7 @@ def plotWordPair(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alp
 
 
 
-def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
+def plotAttrakdiff(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
 	"""Plot the Attrakdiff portfolio
 	and return the associated dataframe"""
 	plt.xlim([-3, 3])
@@ -199,20 +200,14 @@ def plotAttrakdiff(fig: plt.Figure, ax: plt.Axes, datas: Dict[str, DataFrame], a
 
 	plt.legend()
 	plt.title(plt_attr[lang])
-	#pd.options.display.max_rows = 999
 	return pd.DataFrame.from_dict(attr)
 
-# plt.style.use('default')
-#
-# T = loadData({"mars 21": "exp1.xlsx", "sept 21": "exp2.xlsx"})
-# plotAverageValues(T)
-# plotWordPair(T)
-# plotAttrakdiff(T)
 
+# ONLY USED FOR INTERN TESTING
 if __name__ == '__main__':
 	X = loadCSV("../resources/exp2.csv")
-	#fig, ax = plt.subplots()
-	#plotWordPair({'toto': X})
-	fig, ax = plt.subplots()
-	plotAverageValues(fig, ax, {'toto': X}, 0.95, 'en')
+	# fig, ax = plt.subplots()
+	# plotWordPair({'toto': X})
+	f, a = plt.subplots()
+	plotAverageValues(a, {'toto': X}, 0.95, 'en')
 	plt.show()
