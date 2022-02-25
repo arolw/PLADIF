@@ -51,11 +51,13 @@ def interval(data, alpha):
 	according to alpha (alpha=0.05 for a 95% confidence interval)
 	returns the mean (center of the interval) and the interval (center of the interval)
 	"""
+	# We use Student's t-distribution to compute the confidence interval
+	# see https://en.wikipedia.org/wiki/Student%27s_t-distribution
 	mean = data.mean()
 	#return mean, (mean-data.std()/sqrt(2), mean+data.std()/sqrt(2))
 	interval = stats.t.interval(alpha, len(data) - 1, loc=mean, scale=stats.sem(data))
 	return mean, interval[0], interval[1]
-	#return mean, (mean-1.895*stats.sem(data)/sqrt(len(data)-1), mean+1.895*stats.sem(data)/sqrt(len(data)-1))
+
 
 
 
