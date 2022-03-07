@@ -3,4 +3,4 @@ pandas>=1.3.5
 scipy>=1.7.0
 setuptools
 streamlit==1.5.1
-pladif==0.4
+pladif==0.5
