@@ -125,14 +125,14 @@ def plotAverageValues(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, l
 def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: str):
 	"""Draw the diagram of word-pairs
 	and return the associated dataframe"""
-	columns = datas[next(iter(datas))].columns
+	columns = list(datas[next(iter(datas))].columns)
 	plt.plot([0, 0], [len(columns) + 0.5, 0.5], 'k')
 	# plot each line
-	dd = DataFrame.from_dict({name: {col: interval(dF[col], alpha) for col in columns} for name, dF in datas.items()})
-	for name, data in dd.items():
-		T = DataFrame.from_dict({c: v for c, v in data.items()})
-		plt.plot(T.loc[0], range(len(T.columns), 0, -1), 's-', label=name)
-		plt.fill_betweenx(range(len(T.columns), 0, -1), T.loc[1], T.loc[2], alpha=0.1)
+	for name, data in datas.items():
+		T = data.apply(lambda x: interval(x, alpha))
+		print(T)
+		plt.plot(T.loc[0], range(1, len(T.columns)+1), 's-', label=name)
+		plt.fill_betweenx(range(1, len(T.columns)+1), T.loc[1], T.loc[2], alpha=0.1)
 	plt.legend()
 	# add rectangle for each category
 	y = 1
@@ -145,10 +145,10 @@ def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: 
 		y += size
 
 	# set axes, and pair words as left/right labels
-	labelsL = [pairs[col][lang][0] for col in datas[next(iter(datas))].T.index] + [""]
-	labelsR = [pairs[col][lang][1] for col in datas[next(iter(datas))].T.index] + [""]
-	labelsL.reverse()
-	labelsR.reverse()
+	labelsL = [""] + [pairs[col][lang][0] for col in datas[next(iter(datas))].T.index]
+	labelsR = [""] + [pairs[col][lang][1] for col in datas[next(iter(datas))].T.index]
+	#labelsL.reverse()
+	#labelsR.reverse()
 	ax.set_yticks(range(len(labelsL)), labels=labelsL)
 	ax.set_ylim(len(columns)+0.5, 0.5)
 	axR = ax.twinx()
@@ -160,6 +160,8 @@ def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: 
 	ax.set_box_aspect(1.25)
 	plt.title(plt_pair[lang])
 
+	# return data in good shape TODO: just use apply method
+	dd = DataFrame.from_dict({name: {col: interval(dF[col], alpha) for col in columns} for name, dF in datas.items()})
 	return dd.applymap(lambda x: "%.2f: [%.2f;%.2f]" % tuple(x)) if alpha else dd.applymap(lambda x: x[0])
 
 
@@ -209,5 +211,5 @@ if __name__ == '__main__':
 	# fig, ax = plt.subplots()
 	# plotWordPair({'toto': X})
 	f, a = plt.subplots()
-	plotAverageValues(a, {'toto': X}, 0.95, 'en')
+	print(plotWordPair(a, {'toto': X}, 0.95, 'fr'))
 	plt.show()
