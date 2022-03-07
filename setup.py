@@ -43,7 +43,7 @@ def readme():
 
 
 setup(name='pladif',
-      version='0.4',
+      version='0.5',
       description="PLADIF is a simple tool that plot attrakdiff graphs from CSV files (like those from Usabilla)",
       long_description=readme(),
       long_description_content_type='text/markdown',

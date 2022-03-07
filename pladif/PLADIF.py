@@ -41,7 +41,7 @@ from locale import getdefaultlocale
 import matplotlib.pyplot as plt
 from pladif.attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotAverageValues
 from pladif.naming import langOption, plt_pair, plt_attr, plt_avrg
-
+from importlib.metadata import version
 
 
 
@@ -191,8 +191,8 @@ position: fixed; left: 0; bottom: 0; width: 100%; background-color: white; color
 }
 </style>
 <div class="footer">
-<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a>
-is a small open source tool to draw attrakdiff plots from CSV files. &nbsp;&nbsp;&nbsp; ©️ T. Hilaire, 2022.</p>
+<p><a href="https://github.com/thilaire/PLADIF">PLADIF</a> (v""" + version('pladif') + \
+""") is a small open source tool to draw attrakdiff plots from CSV files. &nbsp;&nbsp;&nbsp; ©️ T. Hilaire, 2022.</p>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
