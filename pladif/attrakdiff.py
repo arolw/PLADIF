@@ -109,7 +109,7 @@ def plotAverageValues(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, l
 
 	for name, d in data.items():
 		T = DataFrame.from_dict({c: v for c, v in d.items()})
-		plt.plot(T.loc[0], marker='o')
+		plt.plot(T.loc[0], marker='o', label=name)
 		plt.fill_between(range(len(T.columns)), T.loc[1], T.loc[2], alpha=0.1)
 
 	plt.xlabel(i18n_dim[lang])
@@ -118,6 +118,7 @@ def plotAverageValues(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, l
 	plt.setp(ax.get_xticklabels(), y=0.5)
 	plt.grid()
 	plt.title(plt_avrg[lang])
+	plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fancybox=True, shadow=False)
 	return data.applymap(lambda x: "%.2f: [%.2f;%.2f]" % tuple(x)) if alpha else data.applymap(lambda x: x[0])
 
 
@@ -133,7 +134,8 @@ def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: 
 		print(T)
 		plt.plot(T.loc[0], range(1, len(T.columns)+1), 's-', label=name)
 		plt.fill_betweenx(range(1, len(T.columns)+1), T.loc[1], T.loc[2], alpha=0.1)
-	plt.legend()
+	# legend
+	plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), fancybox=True, shadow=False)
 	# add rectangle for each category
 	y = 1
 	xpos = {'en': -5.3, 'fr': -5.8, 'de': -4}        # TODO: computes it automatically (get minimum position of all labels)
@@ -159,6 +161,7 @@ def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: 
 	ax.grid(visible=True)
 	ax.set_box_aspect(1.25)
 	plt.title(plt_pair[lang])
+
 
 	# return data in good shape TODO: just use apply method
 	dd = DataFrame.from_dict({name: {col: interval(dF[col], alpha) for col in columns} for name, dF in datas.items()})
@@ -200,7 +203,8 @@ def plotAttrakdiff(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang
 		else:
 			attr[name] = {"QP": x, "QH": y}
 
-	plt.legend()
+	#plt.legend()
+	plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fancybox=True, shadow=False)
 	plt.title(plt_attr[lang])
 	return pd.DataFrame.from_dict(attr)
 
@@ -211,5 +215,5 @@ if __name__ == '__main__':
 	# fig, ax = plt.subplots()
 	# plotWordPair({'toto': X})
 	f, a = plt.subplots()
-	print(plotWordPair(a, {'toto': X}, 0.95, 'fr'))
+	print(plotAttrakdiff(a, {'toto': X}, 0.95, 'fr'))
 	plt.show()
