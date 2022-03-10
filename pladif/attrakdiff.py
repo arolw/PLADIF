@@ -38,7 +38,6 @@ from pandas import DataFrame, read_csv
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyBboxPatch
 from scipy import stats
-from io import BytesIO
 import pandas as pd
 
 
@@ -61,34 +60,7 @@ def interval(data, alpha):
 
 
 
-def loadCSV(file: [BytesIO, str]):
-	"""Load the data from an (already open) excel file
-	The data is normalize in [-3,3]
-	Return a dataframe"""
-	# read the excel file into a dataframe
-	Tab = read_csv(file, index_col=0, encoding="UTF-16", delimiter='\t')    # encoding=None, encoding_errors="replace"
-	# drop all the columns after the URL column
-	try:
-		url_index = Tab.columns.get_loc("URL")
-	except KeyError:
-		raise ValueError("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !")
-	Tab.drop(columns=Tab.columns[url_index:], inplace=True)
-	# check the size and rename the columns
-	if len(Tab.columns) not in [len(order_short), len(order_long)]:
-		raise ValueError("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)"
-		                 % (len(order_short), len(order_long)))
-	Tab.columns = order_short if len(Tab.columns) == len(order_short) else order_long
-	# normalize data in [-3,3]
-	for col, serie in Tab.items():
-		if '*' in col:
-			Tab[col] = 4-Tab[col]   # reverse from 3 to -3
-		else:
-			Tab[col] = Tab[col]-4   # from -3 to 3
-	# remove the '*' and sort the columns (same order as the ordered dictionary `pairs`
-	Tab.columns = [(st[:-1] if '*' in st else st) for st in Tab.columns]
-	d = {k: v for v, k in enumerate(pairs)}
-	Tab = Tab.reindex(columns=sorted(Tab.columns, key=d.get))
-	return Tab
+
 
 
 def cat2dict(data: DataFrame) -> Dict[str, List[str]]:

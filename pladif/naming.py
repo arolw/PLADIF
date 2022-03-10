@@ -39,11 +39,13 @@ from collections import OrderedDict
 # language options
 langOption = OrderedDict(en="English", fr="Français", de="Deutsch")
 
+# summary
+summary = {'en': ['filename', '# users'], 'fr': ['nom de fichier', 'nb utilisateurs'], 'de': []}
 
 # short or long attrakdiff
 order_short = ["QP2*", 'ATT2', 'QP3*', 'QHI3*', 'QP5*', "QHI4", "QHS2", "ATT5*", "QP6", "QHS5"]
 order_long = [
-	"QP1*", "QHI1", "ATT1*", "QHS1*", "QP2*", "QHI2*", "ATT2", "QP3", "ATT3*, QP4",
+	"QP1*", "QHI1", "ATT1*", "QHS1*", "QP2*", "QHI2*", "ATT2", "QP3", "ATT3*", "QP4",
 	"QHI3*", "QP5*", "QHI4", "QHI5", "QHI6*", "QHI7", "ATT4", "QHS2", "ATT5*",
 	'QP6', "ATT6", "QHS3*", "QHS4*", "QHS5", "QHS6", "ATT7*", "QHS7*", "QP7"
 ]

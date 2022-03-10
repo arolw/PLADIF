@@ -31,18 +31,16 @@ Date: Feb 2022
 
 	main file with the interactions
 """
-
-
-
+import pandas as pd
 import streamlit as st
 from tempfile import TemporaryDirectory
 from os.path import join, splitext
 from locale import getdefaultlocale
 import matplotlib.pyplot as plt
-from pladif.attrakdiff import loadCSV, plotWordPair, plotAttrakdiff, plotAverageValues
-from pladif.naming import langOption, plt_pair, plt_attr, plt_avrg
+from pladif.attrakdiff import plotWordPair, plotAttrakdiff, plotAverageValues
+from pladif.naming import langOption, plt_pair, plt_attr, plt_avrg, order_long, pairs, order_short
 from importlib.metadata import version
-
+from pladif.data import DataAttrakdiff
 
 
 def updateFileList():
@@ -55,7 +53,7 @@ def updateFileList():
 	if newfiles:
 		for f in newfiles:
 			try:
-				st.session_state.data[splitext(f.name)[0]] = loadCSV(f)
+				st.session_state.data[splitext(f.name)[0]] = DataAttrakdiff(f)
 			except ValueError as e:
 				msg.error(str(e))
 	# check the file(s) that are not anymore in the dict, and del them
@@ -71,6 +69,7 @@ def updateFileList():
 def figure(fct, imgFormat, **kwargs):
 	"""Plot a figure (by calling `fct` with the data)
 	and add a `Download image` button"""
+	return
 	# call the function to draw the plot
 	fig, ax = plt.subplots()
 	ret = fct(ax, st.session_state.data, **kwargs)
@@ -82,6 +81,7 @@ def figure(fct, imgFormat, **kwargs):
 	with open(imgFilename, 'rb') as temp:
 		st.download_button(label="Download image", data=temp, file_name=fct.__name__ + "." + imgFormat, mime="image")
 	return ret
+
 
 
 # create a temporary folder, to put the image files
@@ -100,7 +100,6 @@ lang = langs[0] if langs else 'en'
 # ====== Page ======
 
 st.set_page_config(layout="wide")
-
 
 
 # sidebar (to upload files)
@@ -159,7 +158,12 @@ st.markdown("<h1 style='text-align:center;'>PLADIF: Plot Attrakdiff graphs from 
 
 # plot the graphs and data tables
 if st.session_state.data:
-	# mean values QP, QHI, QHS, ATT
+	# summary table
+	pa = list(c if '*' not in c else c[:-1] for c in order_short)
+	summary = pd.DataFrame([a.summary(pa) for a in st.session_state.data.values()], index=st.session_state.data.keys(), columns=['file name', 'nb rows']+[p + ': %s-%s' % pairs[p][lang] for p in pa]).T
+	summary.astype(str)
+	st.dataframe(summary)
+	# average values QP, QHI, QHS, ATT
 	st.subheader(plt_avrg[lang])
 	col1, col2 = st.columns((3, 1))
 	with col1:
@@ -173,7 +177,7 @@ if st.session_state.data:
 	with col1:
 		pw = figure(plotWordPair, imageFormat, alpha=std, lang=lang)
 	with col2:
-		st.table(pw)
+		st.dataframe(pw)
 
 	# attrakdiff
 	st.subheader(plt_attr[lang])
