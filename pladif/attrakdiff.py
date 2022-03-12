@@ -43,6 +43,7 @@ import pandas as pd
 
 from pladif.naming import categories, titles, order_long, order_short, pairs
 from pladif.naming import i18n_dim, i18n_average, QPQH, plt_avrg, plt_pair, plt_attr
+from pladif.data import DataAttrakdiff, removeStar
 
 
 def interval(data, alpha):
@@ -183,7 +184,9 @@ def plotAttrakdiff(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang
 
 # ONLY USED FOR INTERN TESTING
 if __name__ == '__main__':
-	X = loadCSV("../resources/exp2.csv")
+	X = DataAttrakdiff("../resources/exp2.csv")
+	d = pd.DataFrame(X.summary(order_long, 'en'), index=['file name', 'nb rows', 'filesize']+[p + ': %s-%s' % pairs[removeStar(p)]['fr'] for p in order_long])
+	print(d)
 	# fig, ax = plt.subplots()
 	# plotWordPair({'toto': X})
 	f, a = plt.subplots()

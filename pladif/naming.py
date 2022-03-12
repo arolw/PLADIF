@@ -40,7 +40,9 @@ from collections import OrderedDict
 langOption = OrderedDict(en="English", fr="Français", de="Deutsch")
 
 # summary
-summary = {'en': ['filename', '# users'], 'fr': ['nom de fichier', 'nb utilisateurs'], 'de': []}
+summary_info = {'en': ['filename', '# users', 'file size'], 'fr': ['nom de fichier', 'nb utilisateurs', 'taille du fichier'], 'de': []}
+summary_title = {'en': "Summary", 'fr': "Résumé", 'de': ''}
+
 
 # short or long attrakdiff
 order_short = ["QP2*", 'ATT2', 'QP3*', 'QHI3*', 'QP5*', "QHI4", "QHS2", "ATT5*", "QP6", "QHS5"]

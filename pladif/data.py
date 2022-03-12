@@ -31,11 +31,29 @@ Date: March 2022
 
 	class for the data
 """
+from __future__ import annotations
 
 from io import BytesIO
 from pandas import DataFrame, read_csv
+from math import log10
 from pladif.naming import order_long, order_short, pairs
 
+
+def datasize(size, lang):
+	"""
+	Calculate the size of a code in B/KB/MB.../
+	Return a tuple of (value, unit)
+	"""
+	# see https://stackoverflow.com/questions/12523586/python-format-size-application-converting-b-to-kb-mb-gb-tb
+	units = {'en': ["B", "kB", "MB", "GB", "TB"], 'fr': ["o", "ko", "Mo", "Go", "To"], 'de': ["B", "kB", "MB", "GB", "TB"]}
+	scaling = round(log10(size))//3
+	scaling = min(len(units)-1, scaling)
+	return "%.3f %s" % (size/(10**(3*scaling)), units[lang][scaling])
+
+
+def removeStar(st: str) -> str:
+	"""remove the '*' character in the end of the categories"""
+	return st[:-1] if '*' in st else st
 
 
 class DataAttrakdiff:
@@ -45,10 +63,13 @@ class DataAttrakdiff:
 	- _df: (DataFrame) data
 	"""
 
-	def __init__(self, file: BytesIO):
+	def __init__(self, file: BytesIO | str):
 		"""Load the data from an (already open) csv file
 		The data is normalize in [-3,3]
 		"""
+		# open the file if its just a filename
+		if isinstance(file, str):
+			file = open(file, "rb")
 		self._filename = file.name
 		# read the excel file into a dataframe
 		self._df = read_csv(file, index_col=0, encoding="UTF-16", delimiter='\t')  # encoding=None, encoding_errors="replace"
@@ -71,12 +92,18 @@ class DataAttrakdiff:
 			else:
 				self._df[col] = self._df[col] - 4  # from -3 to 3
 		# remove the '*' and sort the columns (same order as the ordered dictionary `pairs`
-		self._df.columns = [(st[:-1] if '*' in st else st) for st in self._df.columns]
+		self._df.columns = map(removeStar, self._df.columns)
 		d = {k: v for v, k in enumerate(pairs)}
-		self._df = self._df.reindex(columns=sorted(self._df.columns, key=d.get))
+		col, self._CSVcolumns = zip(*sorted(zip(self._df.columns, self._CSVcolumns), key=lambda x: d.get(x[0])))
+		self._df = self._df.reindex(columns=col)
+		# get filesize
+		self._size = file.getbuffer().nbytes
 
 
-	def summary(self, col):
+	def summary(self, col, lang):
+		"""return a summary of the data
+		containing the filename, the number of users and """
+		col = list(c if '*' not in c else c[:-1] for c in col)
 		d = {col: csv for col, csv in zip(self._df.columns, self._CSVcolumns)}
-		return [self._filename, str(self._df.shape[0])] + [c + '+' + d.get(c, '') for c in col]
+		return [self._filename, str(self._df.shape[0]), datasize(self._size, lang)] + [d.get(c, '') for c in col]
 

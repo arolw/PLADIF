@@ -38,9 +38,10 @@ from os.path import join, splitext
 from locale import getdefaultlocale
 import matplotlib.pyplot as plt
 from pladif.attrakdiff import plotWordPair, plotAttrakdiff, plotAverageValues
-from pladif.naming import langOption, plt_pair, plt_attr, plt_avrg, order_long, pairs, order_short
+from pladif.naming import langOption, plt_pair, plt_attr, plt_avrg, order_long, pairs, summary_title, summary_info
 from importlib.metadata import version
-from pladif.data import DataAttrakdiff
+from pladif.data import DataAttrakdiff, removeStar
+
 
 
 def updateFileList():
@@ -158,11 +159,17 @@ st.markdown("<h1 style='text-align:center;'>PLADIF: Plot Attrakdiff graphs from 
 
 # plot the graphs and data tables
 if st.session_state.data:
-	# summary table
-	pa = list(c if '*' not in c else c[:-1] for c in order_short)
-	summary = pd.DataFrame([a.summary(pa) for a in st.session_state.data.values()], index=st.session_state.data.keys(), columns=['file name', 'nb rows']+[p + ': %s-%s' % pairs[p][lang] for p in pa]).T
-	summary.astype(str)
-	st.dataframe(summary)
+	# create summary table and remove empty lines
+	st.subheader(summary_title[lang])
+	sumup = pd.DataFrame(
+		[a.summary(order_long, lang) for a in st.session_state.data.values()],
+		index=st.session_state.data.keys(),
+		columns=summary_info[lang]+['%s-%s (%s)' % (*pairs[removeStar(p)][lang], removeStar(p)) for p in order_long]
+	).T
+	sumup.replace("", float("NaN"), inplace=True)
+	sumup.dropna(subset=sumup.columns, inplace=True)
+	sumup.astype(str)
+	st.table(sumup)
 	# average values QP, QHI, QHS, ATT
 	st.subheader(plt_avrg[lang])
 	col1, col2 = st.columns((3, 1))
