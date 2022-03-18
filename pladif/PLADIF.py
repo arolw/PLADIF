@@ -59,13 +59,10 @@ def updateFileList():
 				data = DataAttrakdiff(f)
 				st.session_state.data[splitext(f.name)[0]] = data
 				# compare with previous columns
-				print("cols=",cols)
-				print("data.columns=",data.columns)
 				if cols and data.columns != cols:
 					msg.error("The file %s should have the same columns as the other files", f.name)
 			except ValueError as e:
 				msg.error(str(e))
-
 
 	# check the file(s) that are not anymore in the dict, and del them
 	delfilenames = [
@@ -80,10 +77,9 @@ def updateFileList():
 def figure(fct, imgFormat, **kwargs):
 	"""Plot a figure (by calling `fct` with the data)
 	and add a `Download image` button"""
-	return
 	# call the function to draw the plot
 	fig, ax = plt.subplots()
-	ret = fct(ax, st.session_state.data, **kwargs)
+	ret = fct(ax, {name: data.df for name, data in st.session_state.data.items()}, **kwargs)
 	st.pyplot(fig)
 	# save it to the file
 	imgFilename = join(tmpFolder.name, fct.__name__ + "." + imgFormat)

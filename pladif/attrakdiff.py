@@ -34,15 +34,14 @@ Date: Feb 2022
 
 
 from typing import Dict, List
-from pandas import DataFrame, read_csv
+from pandas import DataFrame
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyBboxPatch
 from scipy import stats
 import pandas as pd
-from io import BytesIO
 
 
-from pladif.naming import categories, titles, order_long, order_short, pairs
+from pladif.naming import categories, titles, order_long, pairs
 from pladif.naming import i18n_dim, i18n_average, QPQH, plt_avrg, plt_pair, plt_attr
 from pladif.data import DataAttrakdiff, removeStar
 
@@ -118,8 +117,6 @@ def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: 
 	# set axes, and pair words as left/right labels
 	labelsL = [""] + [pairs[col][lang][0] for col in datas[next(iter(datas))].T.index]
 	labelsR = [""] + [pairs[col][lang][1] for col in datas[next(iter(datas))].T.index]
-	#labelsL.reverse()
-	#labelsR.reverse()
 	ax.set_yticks(range(len(labelsL)), labels=labelsL)
 	ax.set_ylim(len(columns)+0.5, 0.5)
 	axR = ax.twinx()
@@ -172,7 +169,6 @@ def plotAttrakdiff(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang
 		else:
 			attr[name] = {"QP": x, "QH": y}
 
-	#plt.legend()
 	plt.legend(loc='center left', bbox_to_anchor=(1, 0.5), fancybox=True, shadow=False)
 	plt.title(plt_attr[lang])
 	return pd.DataFrame.from_dict(attr)
@@ -181,10 +177,13 @@ def plotAttrakdiff(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang
 # ONLY USED, FOR INTERN TESTING
 if __name__ == '__main__':
 	X = DataAttrakdiff("../resources/test2.xlsx")
-	d = pd.DataFrame(X.summary(order_long, 'en'), index=['file name', 'nb rows', 'filesize']+[p + ': %s-%s' % pairs[removeStar(p)]['fr'] for p in order_long])
-	print(d)
+	dd = pd.DataFrame(
+		X.summary(order_long, 'en'),
+		index=['file name', 'nb rows', 'filesize']+[p + ': %s-%s' % pairs[removeStar(p)]['fr'] for p in order_long]
+	)
+	print(dd)
 	# fig, ax = plt.subplots()
 	# plotWordPair({'toto': X})
 	f, a = plt.subplots()
-	print(plotAttrakdiff(a, {'toto': X}, 0.95, 'fr'))
+	print(plotAttrakdiff(a, {'toto': X.df}, 0.95, 'fr'))
 	plt.show()

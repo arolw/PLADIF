@@ -35,7 +35,7 @@ from __future__ import annotations
 
 from io import BytesIO
 from os.path import splitext
-from pandas import DataFrame, read_csv, read_excel
+from pandas import read_csv, read_excel
 from math import log10
 from pladif.naming import order_long, order_short, pairs
 
@@ -127,3 +127,8 @@ class DataAttrakdiff:
 	def columns(self):
 		"""returns the columns"""
 		return self._df.columns
+
+	@property
+	def df(self):
+		"""return the dataframe"""
+		return self._df
