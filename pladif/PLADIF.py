@@ -51,12 +51,22 @@ def updateFileList():
 	# TODO: we can do the same with cache (I guess)!
 	# check the file(s) that are not yet in the dict, and load them
 	newfiles = [f for f in st.session_state.csvFile if f.name not in st.session_state.data]
+	cols = list(st.session_state.data.values())[0].columns if st.session_state.data else []
 	if newfiles:
 		for f in newfiles:
 			try:
-				st.session_state.data[splitext(f.name)[0]] = DataAttrakdiff(f)
+				# load the data
+				data = DataAttrakdiff(f)
+				st.session_state.data[splitext(f.name)[0]] = data
+				# compare with previous columns
+				print("cols=",cols)
+				print("data.columns=",data.columns)
+				if cols and data.columns != cols:
+					msg.error("The file %s should have the same columns as the other files", f.name)
 			except ValueError as e:
 				msg.error(str(e))
+
+
 	# check the file(s) that are not anymore in the dict, and del them
 	delfilenames = [
 		name for name in st.session_state.data.keys() if name not in
@@ -110,8 +120,8 @@ with st.sidebar:
 	st.markdown("<h1 style='text-align: center;'>" + "Add here your CSV files" + "</h1>", unsafe_allow_html=True)
 
 	# file uploader
-	files = st.file_uploader("", type=['csv'], accept_multiple_files=True,
-	    help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla).",
+	files = st.file_uploader("", type=['csv', 'xls', 'xlsx', 'xlsm', 'xlsb', 'odf', 'ods', 'odt'], accept_multiple_files=True,
+	    help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla) or an excel file.",
 	    on_change=updateFileList, key='csvFile'
 	)
 
@@ -122,14 +132,14 @@ with st.sidebar:
 	for i in range(4):
 		st.write("")
 
-	# CSV options
-	with st.expander("CSV options"):
-		CSVtype = {
-			True: "Usabilla CSV file (UTF16, tab as delimiter)",
-			False: "CSV file (UTF8 and coma as delimiter)"
-		}
-		CSV = st.selectbox("Choose a CSV type", CSVtype.keys(), format_func=lambda x: CSVtype.get(x), index=0,
-			help="Choose the type of CSV file.", disabled=True)
+	# # CSV options
+	# with st.expander("CSV options"):
+	# 	CSVtype = {
+	# 		True: "Usabilla CSV file (UTF16, tab as delimiter)",
+	# 		False: "CSV file (UTF8 and coma as delimiter)"
+	# 	}
+	# 	CSV = st.selectbox("Choose a CSV type", CSVtype.keys(), format_func=lambda x: CSVtype.get(x), index=0,
+	# 		help="Choose the type of CSV file.", disabled=True)
 
 	# plot options
 	with st.expander("Plot options"):

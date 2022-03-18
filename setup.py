@@ -60,7 +60,7 @@ setup(name='pladif',
       author_email='thibault@docmatic.fr',
       license='MIT',
       packages=['pladif'],
-      install_requires=['matplotlib', 'pandas', 'streamlit', 'scipy'],
+      install_requires=['matplotlib', 'pandas', 'streamlit', 'scipy', 'openpyxl'],
       entry_points={'console_scripts': ['runPLADIF=pladif.runPladif:runPladif']},
       include_package_data=True,
       zip_safe=False

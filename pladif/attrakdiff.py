@@ -39,6 +39,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyBboxPatch
 from scipy import stats
 import pandas as pd
+from io import BytesIO
 
 
 from pladif.naming import categories, titles, order_long, order_short, pairs
@@ -56,11 +57,6 @@ def interval(data, alpha):
 	mean = data.mean()
 	inter = stats.t.interval(alpha, len(data) - 1, loc=mean, scale=stats.sem(data))
 	return mean, inter[0], inter[1]
-
-
-
-
-
 
 
 
@@ -182,9 +178,9 @@ def plotAttrakdiff(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang
 	return pd.DataFrame.from_dict(attr)
 
 
-# ONLY USED FOR INTERN TESTING
+# ONLY USED, FOR INTERN TESTING
 if __name__ == '__main__':
-	X = DataAttrakdiff("../resources/exp2.csv")
+	X = DataAttrakdiff("../resources/test2.xlsx")
 	d = pd.DataFrame(X.summary(order_long, 'en'), index=['file name', 'nb rows', 'filesize']+[p + ': %s-%s' % pairs[removeStar(p)]['fr'] for p in order_long])
 	print(d)
 	# fig, ax = plt.subplots()

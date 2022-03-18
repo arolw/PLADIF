@@ -34,7 +34,8 @@ Date: March 2022
 from __future__ import annotations
 
 from io import BytesIO
-from pandas import DataFrame, read_csv
+from os.path import splitext
+from pandas import DataFrame, read_csv, read_excel
 from math import log10
 from pladif.naming import order_long, order_short, pairs
 
@@ -46,9 +47,12 @@ def datasize(size, lang):
 	"""
 	# see https://stackoverflow.com/questions/12523586/python-format-size-application-converting-b-to-kb-mb-gb-tb
 	units = {'en': ["B", "kB", "MB", "GB", "TB"], 'fr': ["o", "ko", "Mo", "Go", "To"], 'de': ["B", "kB", "MB", "GB", "TB"]}
-	scaling = round(log10(size))//3
-	scaling = min(len(units)-1, scaling)
-	return "%.3f %s" % (size/(10**(3*scaling)), units[lang][scaling])
+	if size:
+		scaling = round(log10(size))//3
+		scaling = min(len(units)-1, scaling)
+		return "%.3f %s" % (size/(10**(3*scaling)), units[lang][scaling])
+	else:
+		return "unknown"
 
 
 def removeStar(st: str) -> str:
@@ -71,20 +75,29 @@ class DataAttrakdiff:
 		if isinstance(file, str):
 			file = open(file, "rb")
 		self._filename = file.name
+		_, ext = splitext(self._filename)
 		# read the excel file into a dataframe
-		self._df = read_csv(file, index_col=0, encoding="UTF-16", delimiter='\t')  # encoding=None, encoding_errors="replace"
-		# drop all the columns after the URL column
-		try:
-			url_index = self._df.columns.get_loc("URL")
-		except KeyError:
-			raise ValueError("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !")
-		self._CSVcolumns = self._df.columns[:url_index]
-		self._df.drop(columns=self._df.columns[url_index:], inplace=True)
-		# check the size and rename the columns
-		if len(self._df.columns) not in [len(order_short), len(order_long)]:
-			raise ValueError("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)" % (
-			len(order_short), len(order_long)))
-		self._df.columns = order_short if len(self._df.columns) == len(order_short) else order_long
+		if ext[1:] == 'csv':
+			self._df = read_csv(file, index_col=0, encoding="UTF-16", delimiter='\t')  # encoding=None, encoding_errors="replace"
+			# drop all the columns after the URL column
+			try:
+				url_index = self._df.columns.get_loc("URL")
+			except KeyError:
+				raise ValueError("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !")
+			self._CSVcolumns = self._df.columns[:url_index]
+			self._df.drop(columns=self._df.columns[url_index:], inplace=True)
+			# check the size and rename the columns
+			if len(self._df.columns) not in [len(order_short), len(order_long)]:
+				raise ValueError("The csv file is not a valid Usabilla one (doesn not have %d or %d useful columns)" % (
+				len(order_short), len(order_long)))
+			self._df.columns = order_short if len(self._df.columns) == len(order_short) else order_long
+		elif ext[1:] in ['xls', 'xlsx', 'xlsm', 'xlsb', 'odf', 'ods', 'odt']:
+			self._df = read_excel(file, sheet_name=0, index_col=0)  # encoding=None, encoding_errors="replace"
+			self._CSVcolumns = self._df.columns
+			# check if the columns are valid
+			if set(self._df.columns) != set(order_short) and set(self._df.columns) != set(order_long):
+				raise ValueError("The excel file doesn't have proper columns (not in %s)" % str(order_long))
+
 		# normalize data in [-3,3]
 		for col, serie in self._df.items():
 			if '*' in col:
@@ -97,7 +110,10 @@ class DataAttrakdiff:
 		col, self._CSVcolumns = zip(*sorted(zip(self._df.columns, self._CSVcolumns), key=lambda x: d.get(x[0])))
 		self._df = self._df.reindex(columns=col)
 		# get filesize
-		self._size = file.getbuffer().nbytes
+		try:
+			self._size = file.getbuffer().nbytes
+		except AttributeError:
+			self._size = 0
 
 
 	def summary(self, col, lang):
@@ -107,3 +123,7 @@ class DataAttrakdiff:
 		d = {col: csv for col, csv in zip(self._df.columns, self._CSVcolumns)}
 		return [self._filename, str(self._df.shape[0]), datasize(self._size, lang)] + [d.get(c, '') for c in col]
 
+	@property
+	def columns(self):
+		"""returns the columns"""
+		return self._df.columns
