@@ -78,6 +78,7 @@ You can download each image (with the download button below each image; you can 
 
 
 ## Versions
+- v1.3: add resolution menu (in figure option) to choose the image file size
 - v1.2: add support for Excel files (the 1st row contains the header of the column)
 - v1.1: add summary of the files 
 - v1.0: PLADIF is now mature enough to have a 1.0 version !
