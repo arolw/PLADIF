@@ -99,7 +99,6 @@ def plotWordPair(ax: plt.Axes, datas: Dict[str, DataFrame], alpha: float, lang: 
 	# plot each line
 	for name, data in datas.items():
 		T = data.apply(lambda x: interval(x, alpha))
-		print(T)
 		plt.plot(T.loc[0], range(1, len(T.columns)+1), 's-', label=name)
 		plt.fill_betweenx(range(1, len(T.columns)+1), T.loc[1], T.loc[2], alpha=0.1)
 	# legend
