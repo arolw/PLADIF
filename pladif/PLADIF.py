@@ -59,10 +59,14 @@ def updateFileList():
 				data = DataAttrakdiff(f)
 				st.session_state.data[splitext(f.name)[0]] = data
 				# compare with previous columns
-				if cols and data.columns != cols:
-					msg.error("The file %s should have the same columns as the other files", f.name)
+				if len(cols) > 0 and (set(data.columns) != set(cols)):
+					st.error("""**Error loading the file `%s`.**
+					 
+					 The file should have the same columns as the other files""", f.name)
 			except ValueError as e:
-				msg.error(str(e))
+				st.error("""**Error loading the file `%s`.**
+				
+				""" % f.name + str(e))
 
 	# check the file(s) that are not anymore in the dict, and del them
 	delfilenames = [
@@ -120,9 +124,6 @@ with st.sidebar:
 	    help="The file must be a CSV file, with tab delimiter and UTF-16 encoding (as produced by Usabilla) or an excel file.",
 	    on_change=updateFileList, key='csvFile'
 	)
-
-	# error message array
-	msg = st.empty()
 
 	# spacing
 	for i in range(4):
@@ -182,7 +183,7 @@ if st.session_state.data:
 	with col1:
 		mv = figure(plotAverageValues, imageFormat, alpha=std, lang=lang)
 	with col2:
-		st.dataframe(mv)
+		st.table(mv)
 
 	# pair words plot
 	st.subheader(plt_pair[lang])
@@ -190,7 +191,7 @@ if st.session_state.data:
 	with col1:
 		pw = figure(plotWordPair, imageFormat, alpha=std, lang=lang)
 	with col2:
-		st.dataframe(pw)
+		st.table(pw)
 
 	# attrakdiff
 	st.subheader(plt_attr[lang])
@@ -198,7 +199,7 @@ if st.session_state.data:
 	with col1:
 		attrakdiff = figure(plotAttrakdiff, imageFormat, alpha=std, lang=lang)
 	with col2:
-		st.dataframe(attrakdiff)
+		st.table(attrakdiff)
 
 
 
