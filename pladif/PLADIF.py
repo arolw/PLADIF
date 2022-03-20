@@ -87,7 +87,7 @@ def figure(fct, imgFormat, **kwargs):
 	st.pyplot(fig)
 	# save it to the file
 	imgFilename = join(tmpFolder.name, fct.__name__ + "." + imgFormat)
-	plt.savefig(imgFilename, format=imgFormat, dpi=400)
+	plt.savefig(imgFilename, format=imgFormat, dpi=dpi, bbox_inches='tight')
 	# give it to the download image button
 	with open(imgFilename, 'rb') as temp:
 		st.download_button(label="Download image", data=temp, file_name=fct.__name__ + "." + imgFormat, mime="image")
@@ -129,15 +129,6 @@ with st.sidebar:
 	for i in range(4):
 		st.write("")
 
-	# # CSV options
-	# with st.expander("CSV options"):
-	# 	CSVtype = {
-	# 		True: "Usabilla CSV file (UTF16, tab as delimiter)",
-	# 		False: "CSV file (UTF8 and coma as delimiter)"
-	# 	}
-	# 	CSV = st.selectbox("Choose a CSV type", CSVtype.keys(), format_func=lambda x: CSVtype.get(x), index=0,
-	# 		help="Choose the type of CSV file.", disabled=True)
-
 	# plot options
 	with st.expander("Plot options"):
 		# language
@@ -156,6 +147,11 @@ with st.sidebar:
 		imageFormat = st.selectbox("Image format", imageFormatList,
 			help="Chosse the file format used to download the image. The possible formats are:\n" + helpTypes,
 			index=imageFormatList.index('jpg')
+		)
+		resolution = [72, 200, 400]
+		dpi = st.selectbox("Resolution (dpi)", resolution, format_func=lambda x: "%d dpi" % x,
+			help="Larger resolution (in dot per inch) produces larger image file (and better quality)",
+			index = len(resolution)//2
 		)
 
 
