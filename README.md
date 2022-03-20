@@ -71,7 +71,6 @@ You can download each image (with the download button below each image; you can 
 
 ## TODO
 - add Deutsch support
-- support other CSV file (for the moment, only Usabilla's one are supported, ie CSV with UTF-16 encoding and tab as delimiter)
 - integrate all the feedback you may send (just open an issue on GitHub)
 - add a CSV (or excel) report, with all the data
 - add a pdf report
@@ -79,6 +78,10 @@ You can download each image (with the download button below each image; you can 
 
 
 ## Versions
+- v1.2: add support for Excel files (the 1st row contains the header of the column)
+- v1.1: add summary of the files 
+- v1.0: PLADIF is now mature enough to have a 1.0 version !
+- v0.5: correct bug in pair-word figure
 - v0.4: add various image formats for the download (jpeg, tiff, pdf, svg or png)
 - v0.3: display confidence intervals in the tables
 - v0.2: plot confidence intervals (based on [Student's *t*-distribution](https://en.wikipedia.org/wiki/Student%27s_t-distribution), that is probably different that the one used by [Attrakdiff](http://www.attrakdif.de), but I don't know there is no documentation about it there)
