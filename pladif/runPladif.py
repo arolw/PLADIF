@@ -36,7 +36,7 @@ Date: Feb 2022
 from inspect import getfile
 import pladif
 from os.path import split, join
-from streamlit import cli
+from streamlit.web import cli
 import sys
 
 
