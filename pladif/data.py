@@ -32,13 +32,16 @@ Date: March 2022
 	class for the data
 """
 from __future__ import annotations
-
+from tempfile import NamedTemporaryFile
+from itertools import product
 from io import BytesIO
-from os.path import splitext
+from os.path import splitext, getsize
 from pandas import read_csv, read_excel
 from math import log10
 from pladif.naming import order_long, order_short, pairs
 
+encoders = ['UTF-16', 'UTF-8', None]
+delimiters = ['\t',';']
 
 def datasize(size, lang):
 	"""
@@ -71,19 +74,37 @@ class DataAttrakdiff:
 		"""Load the data from an (already open) csv file
 		The data is normalize in [-3,3]
 		"""
-		# open the file if its just a filename
-		if isinstance(file, str):
-			file = open(file, "rb")
-		self._filename = file.name
-		_, ext = splitext(self._filename)
+		self._filename = file if isinstance(file, str) else file.name
+		# open the file if it's just a filename
+		if isinstance(file, BytesIO):
+			# write the BytesIO into a temporary file (to prevent the bug from read_csv that is sometimes not able to read it)
+			_, ext = splitext(file.name)
+			with NamedTemporaryFile("wb", suffix=ext, delete=False) as tmp:
+				#open("tempFile." + ext, "wb").write(file.read())
+				tmp.write(file.read())
+			file = tmp.name
+
+
+
 		# read the excel file into a dataframe
 		if ext[1:] == 'csv':
-			self._df = read_csv(file, index_col=0, encoding="UTF-16", delimiter='\t')  # encoding=None, encoding_errors="replace"
-			# drop all the columns after the URL column
-			try:
-				url_index = self._df.columns.get_loc("URL")
-			except KeyError:
-				raise ValueError("The csv file is not a valid Usabilla one (does not contain a 'URL' column) !")
+
+			# try different encoding/delimiter util it works
+			for enc, deli in product(encoders, delimiters):
+				try:
+					print(f'---- Trying encoder={enc} delimiter={deli}')
+					# open the file and drop all the columns after the URL column if it exists
+					self._df = read_csv(file, index_col=0, encoding=enc, delimiter=deli, delim_whitespace=False)  # encoding=None, encoding_errors="replace"
+					url_index = self._df.columns.get_loc("URL")
+					break
+				except Exception as e:
+					print(type(e))
+					print(e)
+					# let's try another encoding/delimiters
+					pass
+			else:
+				raise ValueError("USAT cannot read The csv file !")
+
 			self._CSVcolumns = self._df.columns[:url_index]
 			self._df.drop(columns=self._df.columns[url_index:], inplace=True)
 			# check the size and rename the columns
@@ -110,10 +131,7 @@ class DataAttrakdiff:
 		col, self._CSVcolumns = zip(*sorted(zip(self._df.columns, self._CSVcolumns), key=lambda x: d.get(x[0])))
 		self._df = self._df.reindex(columns=col)
 		# get filesize
-		try:
-			self._size = file.getbuffer().nbytes
-		except AttributeError:
-			self._size = 0
+		self._size = getsize(file)
 
 
 	def summary(self, col, lang):
