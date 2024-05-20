@@ -40,8 +40,8 @@ from collections import OrderedDict
 langOption = OrderedDict(en="English", fr="Français", de="Deutsch")
 
 # summary
-summary_info = {'en': ['filename', '# users', 'file size'], 'fr': ['nom de fichier', 'nb utilisateurs', 'taille du fichier'], 'de': []}
-summary_title = {'en': "Summary", 'fr': "Résumé", 'de': ''}
+summary_info = {'en': ['filename', '# users', 'file size'], 'fr': ['nom de fichier', 'nb utilisateurs', 'taille du fichier'], 'de': ['dateiname', '# nutzer', 'dateigröße']}
+summary_title = {'en': "Summary", 'fr': "Résumé", 'de': 'Zusammenfassung'}
 
 
 # short or long attrakdiff
@@ -53,31 +53,31 @@ order_long = [
 ]
 
 # few words translated
-i18n_average = {'en': "Average value", 'fr': "Valeur moyenne", 'de': ""}
-i18n_dim = {'en': "Dimension", 'fr': "Dimension", 'de': ""}
-plt_avrg = {'en': "Diagram of average values", 'fr': "Graphique des valeurs moyennes", 'de': ""}
-plt_pair = {'en': "Description of Word-pairs", 'fr': "Graphique des paires de mots", 'de': ""}
-plt_attr = {'en': "Portfolio-presentation", 'fr': "Portfolio des résultats", 'de': ""}
+i18n_average = {'en': "Average value", 'fr': "Valeur moyenne", 'de': "Mittelwert"}
+i18n_dim = {'en': "Dimension", 'fr': "Dimension", 'de': "Dimension"}
+plt_avrg = {'en': "Diagram of average values", 'fr': "Graphique des valeurs moyennes", 'de': "Diagramm der Mittelwerte"}
+plt_pair = {'en': "Description of Word-pairs", 'fr': "Graphique des paires de mots", 'de': "Beschreibung der Wortpaare"}
+plt_attr = {'en': "Portfolio-presentation", 'fr': "Portfolio des résultats", 'de': "Portfoliopräsentation"}
 
 # categories title
 categories = ["QP", "QHS", "QHI", "ATT"]
 titles = {
-	"QP": {'en': "Pragmatic Quality", 'fr': "Qualité Pragmatique", 'de': ""},
-	"QHS": {'en': "Hedonic Quality - Stimulation", 'fr': "Qualité hédonique - stimulation", 'de': ""},
-	"QHI": {'en': "Hedonic Quality - Identify", 'fr': "Qualité hédonique - identification", 'de': ""},
-	"QH": {'en': "Hedonic Quality", 'fr': "Qualité hédonique", 'de': ""},
-	"ATT": {'en': "Attrativeness", 'fr': "Attractivité", 'de': ""}
+	"QP": {'en': "Pragmatic Quality", 'fr': "Qualité Pragmatique", 'de': "Pragmatische Qualität"},
+	"QHS": {'en': "Hedonic Quality - Stimulation", 'fr': "Qualité hédonique - stimulation", 'de': "Hedonische Qualität - Stimulation"},
+	"QHI": {'en': "Hedonic Quality - Identify", 'fr': "Qualité hédonique - identification", 'de': "Hedonische Qualität - Identität"},
+	"QH": {'en': "Hedonic Quality", 'fr': "Qualité hédonique", 'de': "Hedonische Qualität"},
+	"ATT": {'en': "Attrativeness", 'fr': "Attractivité", 'de': "Attraktivität"}
 }
 
 # attrakdiff cases
 QPQH = {
-	(-2, 2): {'en': "too\nself-\noriented", 'fr': "trop\norienté\nvers le soi", 'de': ""},
-	(0, 2): {'en': "self-\noriented", 'fr': "orienté\nvers le soi", 'de': ""},
-	(2, 2): {'en': "desired", 'fr': "désiré", 'de': ""},
-	(0, 0): {'en': "neutral", 'fr': "neutre", 'de': ""},
-	(2, 0): {'en': "taks-\noriented", 'fr': "orienté tâche", 'de': ""},
-	(-2, -2): {'en': "superfluous", 'fr': "superflu", 'de': ""},
-	(2, -2): {'en': "too\ntask-\noriented", 'fr': "trop\norienté\ntâche", 'de': ""},
+	(-2, 2): {'en': "too\nself-\noriented", 'fr': "trop\norienté\nvers le soi", 'de': "zu\selbst-\orientiert"},
+	(0, 2): {'en': "self-\noriented", 'fr': "orienté\nvers le soi", 'de': "selbst-\orientiert"},
+	(2, 2): {'en': "desired", 'fr': "désiré", 'de': "begehrt"},
+	(0, 0): {'en': "neutral", 'fr': "neutre", 'de': "neutral"},
+	(2, 0): {'en': "taks-\noriented", 'fr': "orienté tâche", 'de': "handlungs-\orientiert"},
+	(-2, -2): {'en': "superfluous", 'fr': "superflu", 'de': "überflüssig"},
+	(2, -2): {'en': "too\ntask-\noriented", 'fr': "trop\norienté\ntâche", 'de': "zu\handlungs-\orientiert"},
 }
 
 # pairs of word, ordered in the order we want them on the graph (QP, QHS, QHI and APP)
@@ -85,143 +85,143 @@ pairs = OrderedDict(
 	QP1={
 		'en': ("Technical", "Human"),
 		'fr': ("Technique", "Humain"),
-		'de': ("", "")
+		'de': ("Technisch", "Menschlich")
 	},
 	QP2={
 		'en': ("Complicated", "Simple"),
 		'fr': ("Compliqué", "Simple"),
-		'de': ("", "")
+		'de': ("Kompliziert", "Menschlich")
 	},
 	QP3={
 		'en': ("Impractical", "Pratical"),
 		'fr': ("Pas pratique", "Pratique"),
-		'de': ("", "")
+		'de': ("Unpraktisch", "Praktisch")
 	},
 	QP4={
 		'en': ("Cumbersome", "Straightforward"),
 		'fr': ("Fastidieux", "Efficace"),
-		'de': ("", "")
+		'de': ("Umständlich", "Direkt")
 	},
 	QP5={
 		'en': ("Unpredictable", "Predictable"),
 		'fr': ("Imprévisible", "Prévisible"),
-		'de': ("", "")
+		'de': ("Unberechenbar", "Berechenbar")
 	},
 	QP6={
 		'en': ("Confusing", "Clearly structured"),
 		'fr': ("Confus", "Clair"),
-		'de': ("", "")
+		'de': ("Verwirrend", "Übersichtlich")
 	},
 	QP7={
 		'en': ("Unruly", "Manageable"),
 		'fr': ("Incontrôlable", "Maîtrisable"),
-		'de': ("", "")
+		'de': ("Widerspenstig", "Handhabbar")
 	},
 	QHS1={
 		'en': ("Conventional", "Inventive"),
 		'fr': ("Conventionnel", "Original"),
-		'de': ("", "")
+		'de': ("Konventionell", "Originell")
 	},
 	QHS2={
 		'en': ("Unimaginative", "Creative"),
 		'fr': ("Sans imagination", "Créatif"),
-		'de': ("", "")
+		'de': ("Phantasielos", "Kreativ")
 	},
 	QHS3={
 		'en': ("Cautious", "Bold"),
 		'fr': ("Prudent", "Audacieux"),
-		'de': ("", "")
+		'de': ("Vorsichtig", "Mutig")
 	},
 	QHS4={
 		'en': ("Conservative", "Innovative"),
 		'fr': ("Conservateur", "Novateur"),
-		'de': ("", "")
+		'de': ("Konservativ", "Innovativ")
 	},
 	QHS5={
 		'en': ("Dull", "Captivating"),
 		'fr': ("Ennuyeux", "Captivant"),
-		'de': ("", "")
+		'de': ("Lahm", "Fesselnd")
 	},
 	QHS6={
 		'en': ("Undemanding", "Challenging"),
 		'fr': ("Peu exigeant", "Challenging"),
-		'de': ("", "")
+		'de': ("Harmlos", "Herausfordernd")
 	},
 	QHS7={
 		'en': ("Ordinary", "Novel"),
 		'fr': ("Commun", "Nouveau"),
-		'de': ("", "")
+		'de': ("Herkömmlich", "Neuartig")
 	},
 	QHI1={
 		'en': ("Isolating", "Connective"),
 		'fr': ("M’isole", "Me sociabilise"),
-		'de': ("", "")
+		'de': ("Isolierend", "Verbindend")
 	},
 	QHI2={
 		'en': ("Unprofessional", "Professional"),
 		'fr': ("Amateur", "Professionnel"),
-		'de': ("", "")
+		'de': ("Laienhaft", "Fachmännisch")
 	},
 	QHI3={
 		'en': ("Tacky", "Stylish"),
 		'fr': ("De mauvais goût", "De bon goût"),
-		'de': ("", "")
+		'de': ("Stillos", "Stilvoll")
 	},
 	QHI4={
 		'en': ("Cheap", "Premium"),
 		'fr': ("Bas de gamme", "Haut de gamme"),
-		'de': ("", "")
+		'de': ("Minderwertig", "Wertvoll")
 	},
 	QHI5={
 		'en': ("Alienating", "Integrating"),
 		'fr': ("M’exclut", "M’intègre"),
-		'de': ("", "")
+		'de': ("Ausgrenzend", "Einbeziehend")
 	},
 	QHI6={
 		'en': ("Separates me", "Bring me closer"),
 		'fr': ("Me sépare des autres", "Me rapproche des autres"),
-		'de': ("", "")
+		'de': ("Trennt mich von Leuten", "Bringt mich den Leuten näher")
 	},
 	QHI7={
 		'en': ("Unpresentable", "Presentable"),
 		'fr': ("Non présentable", "Présentable"),
-		'de': ("", "")
+		'de': ("Nicht vorzeigbar", "Vorzeigbar")
 	},
 
 	ATT1={
 		'en': ("Unpleasant", "Pleasant"),
 		'fr': ("Déplaisant", "Plaisant"),
-		'de': ("", "")
+		'de': ("Unangenehm", "Angenehm")
 	},
 	ATT2={
 		'en': ("Ugly", "Attractive"),
 		'fr': ("Laid", "Beau"),
-		'de': ("", "")
+		'de': ("Hässlich", "Schön")
 	},
 	ATT3={
 		'en': ("Disagreeable", "Likeable"),
 		'fr': ("Désagréable", "Agréable"),
-		'de': ("", "")
+		'de': ("Unsympathisch", "Sympathisch")
 	},
 	ATT4={
 		'en': ("Rejecting", "Inviting"),
 		'fr': ("Rebutant", "Attirant"),
-		'de': ("", "")
+		'de': ("Zurückweisend", "Einladend")
 	},
 	ATT5={
 		'en': ("Bad", "Good"),
 		'fr': ("Mauvais", "Bon"),
-		'de': ("", "")
+		'de': ("Schlecht", "Gut")
 	},
 	ATT6={
 		'en': ("Repelling", "appealing"),
 		'fr': ("Repoussant", "Attrayant"),
-		'de': ("", "")
+		'de': ("Abstoßend", "Anziehend")
 	},
 	ATT7={
 		'en': ("Discouraging", "Motivating"),
 		'fr': ("Décourageant", "Motivant"),
-		'de': ("", "")
+		'de': ("Entmütigend", "Moivierend")
 	}
 )
 
